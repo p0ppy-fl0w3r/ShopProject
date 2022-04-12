@@ -1,0 +1,77 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h2>Create a new account.</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true" placeholder=" " />
+                <label asp-for="Input.FirstName"></label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating  mb-3">
+                <input asp-for="Input.LastName" class="form-control" autocomplete="family-name" placeholder=" " aria-required="true" />
+                <label asp-for="Input.LastName"></label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating  mb-3">
+                <p><strong>Please select your gender: </strong></p>
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(m => m.Input.Gender, "Male", new {id = "male-radio", @class = "form-check-input"})
+                    <label class="form-check-label" for="male-radio">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(m => m.Input.Gender, "Female", new {id = "female-radio", @class = "form-check-input"})
+                    <label class="form-check-label" for="female-radio">Female</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(m => m.Input.Gender, "Other", new {id = "others-radio", @class = "form-check-input"})
+                    @*<input class="form-check-input" type="radio" name="inlineRadioOptions" id="others-radio" value="Other">*@
+                    <label class="form-check-label" for="others-radio">Others</label>
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(m => m.Input.Gender, "", new {@class="text-danger field-validation-error"})
+                </div>
+            </div>
+
+            <div class="form-floating  mb-3">
+                <input type="date" asp-for="Input.DateOfBirth" class="form-control" autocomplete="bday" aria-required="true" />
+                <label asp-for="Input.DateOfBirth"></label>
+                <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating  mb-3">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder=" " aria-required="true" />
+                <label asp-for="Input.Email"></label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating  mb-3">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder=" " />
+                <label asp-for="Input.Password"></label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating  mb-3">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder=" " />
+                <label asp-for="Input.ConfirmPassword"></label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary rounded-pill">Get Started!</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}
