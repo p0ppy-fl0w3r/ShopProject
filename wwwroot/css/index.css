@@ -1,0 +1,42 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Artifika&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+
+#greeting {
+    font-family: 'Artifika', serif;
+}
+
+#card-container {
+    margin-top: 10em;
+}
+
+#catalog-button {
+    background-color: #7e57c2;
+    border-color: #7e57c2;
+    font-family: 'Varela Round', sans-serif;
+    font-size: 1.2em;
+}
+
+#loan-button {
+    background-color: #123054;
+    border-color: #123054;
+    color: #fe9e6c;
+    font-family: 'Varela Round', sans-serif;
+    font-size: 1.2em;
+}
+
+#member-button {
+    background-color: #62c1c5;
+    border-color: #62c1c5;
+    color: #fbd14c;
+    font-family: 'Varela Round', sans-serif;
+    font-size: 1.2em;
+}
+
+.btn{
+    transition: transform linear 0.2s;
+}
+
+    .btn:hover {
+        transform:scale(1.07);
+    }

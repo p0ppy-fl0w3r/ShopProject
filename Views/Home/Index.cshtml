@@ -24,7 +24,57 @@
     }
 }
 
+@section Styles{
+<link href="@Url.Content("~/css/index.css")" rel="stylesheet" type="text/css" />
+}
+
 <div class="text-center">
-    <h1 class="display-4">@greetingMessage @Model.FirstName!</h1>
-    
+    <h1 id="greeting" class="display-4">@greetingMessage @Model.FirstName!</h1>
+
+
+    <div id="card-container">
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+            <div class="col">
+                <div class="card h-100">
+                    <img src="~/images/catalogue.png" class="card-img-top" alt="DvD">
+                    <p class="card-text">Manage your DvD catalog.</p>
+                    <div class="card-footer bg-transparent">
+                        <div class="d-grid gap-2">
+                            <button id="catalog-button" class="btn btn-primary rounded-pill" type="button">Catalog</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <img src="~/images/rent.jpg" class="card-img-top" alt="Rent">
+                    <p class="card-text">Loan DvDs to members.</p>
+                    <div class="card-footer bg-transparent">
+                        <div class="d-grid gap-2">
+                            <button id="loan-button" class="btn btn-primary rounded-pill" type="button">Loan Management</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <img src="~/images//member.jpg" class="card-img-top" alt="Members">
+                    <p class="card-text">Manage the member info.</p>
+                    <div class="card-footer bg-transparent">
+                        <div class="d-grid gap-2">
+                            <button id="member-button" class="btn btn-primary rounded-pill" type="button">Members</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
+
