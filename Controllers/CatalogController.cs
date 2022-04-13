@@ -1,0 +1,239 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using MyShop.Data;
+using MyShop.DTOs;
+using MyShop.Models;
+
+// TODO delete and recreate the database
+// FIXME StudioId is not a identity column. It was not auto-generating.
+
+namespace MyShop.Controllers
+{
+    public class CatalogController : Controller
+    {
+        private readonly ApplicationDbContext _context;
+
+        public CatalogController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        // GET: Catalog
+        public async Task<IActionResult> Index()
+        {
+            var applicationDbContext = _context.Dvdtitles.Include(d => d.Category).Include(d => d.Produce).Include(d => d.Studio);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        // GET: Catalog/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var dvdtitle = await _context.Dvdtitles
+                .Include(d => d.Category)
+                .Include(d => d.Produce)
+                .Include(d => d.Studio)
+                .FirstOrDefaultAsync(m => m.DvdId == id);
+            if (dvdtitle == null)
+            {
+                return NotFound();
+            }
+
+            return View(dvdtitle);
+        }
+
+        // GET: Catalog/Create
+        public IActionResult Create()
+        {
+            var dvdDto = new DvdTitleDto { DateReleased = DateTime.Now };
+
+            ViewData["CategoryList"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating");
+            ViewData["ProduceList"] = new SelectList(_context.Producers, "ProducerId", "ProducerName");
+            ViewData["StudioList"] = new SelectList(_context.Studios, "StudioId", "StudioName");
+
+            return View(dvdDto);
+        }
+
+        private bool IsOldValid(DvdTitleDto dto) {
+            return dto.Category.CategoryId != 0 || dto.Producer.ProducerId != 0 || dto.Studio.StudioId != 0;
+        }
+
+        // POST: Catalog/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(DvdTitleDto dvdDto)
+        {
+            
+            if (ModelState.IsValid || IsOldValid(dvdDto))
+            {
+
+                using var transaction = _context.Database.BeginTransaction();
+
+                try {
+
+                    var category = dvdDto.Category;
+                    var studio = dvdDto.Studio;
+                    var producer = dvdDto.Producer;
+
+                    var categoryId = dvdDto.Category.CategoryId;
+                    var studioId = dvdDto.Studio.StudioId;
+                    var producerId = dvdDto.Producer.ProducerId;
+
+                    // If the user added new items then, add them to the database first and get the IDs.
+                    if (categoryId == 0)
+                    {
+                        _context.Dvdcategories.Add(category);
+
+                        _context.SaveChanges();
+                        categoryId = category.CategoryId;
+                    }
+
+                    if (studioId == 0)
+                    {
+                        _context.Studios.Add(studio);
+
+                        _context.SaveChanges();
+                        studioId = studio.StudioId;
+                    }
+
+                    if (producerId == 0)
+                    {
+                        _context.Producers.Add(producer);
+
+                        _context.SaveChanges();
+                        producerId = producer.ProducerId;
+                    }
+
+                    _context.Dvdtitles.Add(new Dvdtitle {
+                        DvdId = 0,
+                        StudioId = studioId,
+                        CategoryId = categoryId,
+                        ProduceId = producerId,
+                        DateReleased = dvdDto.DateReleased,
+                        Rate = dvdDto.Rate,
+                        PenaltyRate = dvdDto.PenaltyRate,
+                    });
+
+                    await _context.SaveChangesAsync();
+                    transaction.Commit();
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred on our side. Please contact the IT department.");
+                }
+            }
+
+            // TODO show the titles instead of id.
+            ViewData["CategoryId"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating", dvdDto.Category.CategoryId);
+            ViewData["ProduceId"] = new SelectList(_context.Producers, "ProducerId", "ProducerName", dvdDto.Producer.ProducerId);
+            ViewData["StudioId"] = new SelectList(_context.Studios, "StudioId", "StudioName", dvdDto.Studio.StudioId);
+            return View(dvdDto);
+        }
+
+        // GET: Catalog/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var dvdtitle = await _context.Dvdtitles.FindAsync(id);
+            if (dvdtitle == null)
+            {
+                return NotFound();
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating", dvdtitle.CategoryId);
+            ViewData["ProduceId"] = new SelectList(_context.Producers, "ProducerId", "ProducerName", dvdtitle.ProduceId);
+            ViewData["StudioId"] = new SelectList(_context.Studios, "StudioId", "StudioName", dvdtitle.StudioId);
+            return View(dvdtitle);
+        }
+
+        // POST: Catalog/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("DvdId,ProduceId,CategoryId,StudioId,DateReleased,Rate,PenaltyRate")] Dvdtitle dvdtitle)
+        {
+            if (id != dvdtitle.DvdId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(dvdtitle);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!DvdtitleExists(dvdtitle.DvdId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating", dvdtitle.CategoryId);
+            ViewData["ProduceId"] = new SelectList(_context.Producers, "ProducerId", "ProducerName", dvdtitle.ProduceId);
+            ViewData["StudioId"] = new SelectList(_context.Studios, "StudioId", "StudioName", dvdtitle.StudioId);
+            return View(dvdtitle);
+        }
+
+        // GET: Catalog/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var dvdtitle = await _context.Dvdtitles
+                .Include(d => d.Category)
+                .Include(d => d.Produce)
+                .Include(d => d.Studio)
+                .FirstOrDefaultAsync(m => m.DvdId == id);
+            if (dvdtitle == null)
+            {
+                return NotFound();
+            }
+
+            return View(dvdtitle);
+        }
+
+        // POST: Catalog/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var dvdtitle = await _context.Dvdtitles.FindAsync(id);
+            _context.Dvdtitles.Remove(dvdtitle);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool DvdtitleExists(int id)
+        {
+            return _context.Dvdtitles.Any(e => e.DvdId == id);
+        }
+    }
+}

@@ -1,0 +1,152 @@
+﻿@model MyShop.DTOs.DvdTitleDto
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Add a new DvD to your collection.</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+
+            @*For category*@
+
+            <div class="form-group">
+                <label asp-for="Category.CategoryId" class="control-label"></label>
+                <select id="category-select" asp-for="Category.CategoryId" class="form-control" asp-items="ViewBag.CategoryList"></select>
+                <span asp-validation-for="Category.CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" data-bs-toggle="collapse" data-bs-target="#newCategoryCollapse" aria-expanded="false" aria-controls="newCategoryCollapse" type="checkbox" id="new-category-toggle">
+                <label class="form-check-label" for="new-category-toggle">Add a new category.</label>
+            </div>
+
+            <div class="collapse" id="newCategoryCollapse">
+                <div class="card card-body">
+                    <div class="form-group">
+                        <label asp-for="Category.CategoryDescription" class="control-label">Description</label>
+                        <input asp-for="Category.CategoryDescription" class="form-control" />
+                        <span asp-validation-for="Category.CategoryDescription" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Category.AgeRating" class="control-label">Age Rating</label>
+                        <input asp-for="Category.AgeRating" class="form-control" />
+                        <span asp-validation-for="Category.AgeRating" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            @*For producer*@
+
+            <div class="form-group">
+                <label asp-for="Producer.ProducerId" class="control-label"></label>
+                <select id="producer-select" asp-for="Producer.ProducerId" class="form-control" asp-items="ViewBag.ProduceList"></select>
+                <span asp-validation-for="Producer.ProducerId" class="text-danger"></span>
+            </div>
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" data-bs-toggle="collapse" data-bs-target="#newProducerCollapse" aria-expanded="false" aria-controls="newProducerCollapse" type="checkbox" id="new-producer-toggle">
+                <label class="form-check-label" for="new-producer-toggle">Add a new producer.</label>
+            </div>
+
+            <div class="collapse" id="newProducerCollapse">
+                <div class="card card-body">
+                    <div class="form-group">
+                        <label asp-for="Producer.ProducerName" class="control-label">Producer's Name</label>
+                        <input asp-for="Producer.ProducerName" class="form-control" />
+                        <span asp-validation-for="Producer.ProducerName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            @*For Studio*@
+
+            <div class="form-group">
+                <label asp-for="Studio.StudioId" class="control-label"></label>
+                <select id="studio-select" asp-for="Studio.StudioId" class="form-control" asp-items="ViewBag.StudioList"></select>
+                <span asp-validation-for="Studio.StudioId" class="text-danger"></span>
+            </div>
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" data-bs-toggle="collapse" data-bs-target="#newStudioCollapse" aria-expanded="false" aria-controls="newStudioCollapse" type="checkbox" id="new-studio-toggle">
+                <label class="form-check-label" for="new-studio-toggle">Add a new studio.</label>
+            </div>
+
+            <div class="collapse" id="newStudioCollapse">
+                <div class="card card-body">
+                    <div class="form-group">
+                        <label asp-for="Studio.StudioName" class="control-label">Studio's Name</label>
+                        <input asp-for="Studio.StudioName" class="form-control" />
+                        <span asp-validation-for="Studio.StudioName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            @*For DvD title*@
+
+            <div class="form-group">
+                <label asp-for="DateReleased" class="control-label"></label>
+                <input asp-for="DateReleased" type="date" class="form-control" />
+                <span asp-validation-for="DateReleased" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rate" class="control-label"></label>
+                <input asp-for="Rate" class="form-control" />
+                <span asp-validation-for="Rate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PenaltyRate" class="control-label"></label>
+                <input asp-for="PenaltyRate" class="form-control" />
+                <span asp-validation-for="PenaltyRate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+<script type="text/javascript">
+
+    function toggleDisable(mToggleSwitch, mField){
+        mToggleSwitch.addEventListener("change", function(event){
+            if(mToggleSwitch.checked){
+                mField.disabled = true;
+            }
+            else{
+             mField.disabled = false;
+            }
+         });
+    }
+
+    var categorySelect = document.getElementById("category-select");
+    var categorySwitch = document.getElementById("new-category-toggle");
+    
+    var producerSelect = document.getElementById("producer-select");
+    var producerSwitch = document.getElementById("new-producer-toggle"); 
+    
+    var studioSelect = document.getElementById("studio-select");
+    var studioSwitch = document.getElementById("new-studio-toggle");
+
+    toggleDisable(categorySwitch, categorySelect);
+    toggleDisable(producerSwitch, producerSelect);
+    toggleDisable(studioSwitch, studioSelect);
+
+
+</script>
+}

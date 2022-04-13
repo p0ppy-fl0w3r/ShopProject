@@ -124,11 +124,6 @@ namespace MyShop.Data
                     .HasName("MembershipCategory_PK");
             });
 
-            modelBuilder.Entity<Studio>(entity =>
-            {
-                entity.Property(e => e.StudioId).ValueGeneratedNever();
-            });
-
         }
     }
 }

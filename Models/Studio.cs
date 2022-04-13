@@ -17,8 +17,6 @@ namespace MyShop.Models
         [Key]
         public int StudioId { get; set; }
         [Required]
-        
-        
         public string StudioName { get; set; }
 
         [InverseProperty("Studio")]

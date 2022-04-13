@@ -1,13 +1,17 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Artifika&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
-
-
+﻿
 #greeting {
     font-family: 'Artifika', serif;
 }
 
+#greeting-message {
+    font-family: 'Varela Round', sans-serif;
+    font-weight: lighter;
+    color:gray;
+    margin:20px;
+}
+
 #card-container {
-    margin-top: 10em;
+    margin-top: 8em;
 }
 
 #catalog-button {
@@ -34,9 +38,13 @@
 }
 
 .btn{
-    transition: transform linear 0.2s;
+    transition: transform linear 0.15s;
 }
 
     .btn:hover {
         transform:scale(1.07);
     }
+
+.card-text {
+    font-family: 'Varela Round', sans-serif;
+}

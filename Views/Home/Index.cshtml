@@ -30,6 +30,7 @@
 
 <div class="text-center">
     <h1 id="greeting" class="display-4">@greetingMessage @Model.FirstName!</h1>
+    <h3 id="greeting-message">How are you doing today?</h3>
 
 
     <div id="card-container">
@@ -42,7 +43,7 @@
                     <p class="card-text">Manage your DvD catalog.</p>
                     <div class="card-footer bg-transparent">
                         <div class="d-grid gap-2">
-                            <button id="catalog-button" class="btn btn-primary rounded-pill" type="button">Catalog</button>
+                            <button id="catalog-button" onclick="location.href='@Url.Action("Index", "Catalog")'" class="btn btn-primary rounded-pill">Catalog</button>
                         </div>
                     </div>
                 </div>

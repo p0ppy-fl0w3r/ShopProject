@@ -138,8 +138,6 @@ namespace MyShop.Areas.Identity.Pages.Account
                 user.Gender = Input.Gender;
                 user.DateOfBirth = Input.DateOfBirth;
 
-                Console.WriteLine($"The date of birth id {user.DateOfBirth} and the original was {Input.DateOfBirth}");
-
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
