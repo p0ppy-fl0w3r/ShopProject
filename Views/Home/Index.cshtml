@@ -1,8 +1,30 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
+
+    var greetingMessage = "";
+
+    var currentTime = DateTime.Now.Hour;
+
+    if (currentTime < 12)
+    {
+        greetingMessage = "Good Morning";
+    }
+    else if (currentTime >= 12 && currentTime < 16)
+    {
+        greetingMessage = "Good Afternoon";
+    }
+    else
+    {
+        greetingMessage = "Good Evening";
+    }
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">@greetingMessage @Model.FirstName!</h1>
+    
 </div>

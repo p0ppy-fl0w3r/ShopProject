@@ -18,5 +18,7 @@ namespace MyShop.Models
 
         [Required(ErrorMessage = "Gender is required.")]
         public string Gender { get; set; }
+
+
     }
 }

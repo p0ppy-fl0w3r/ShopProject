@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MyShop.Data;
 using MyShop.Models;
 using System.Diagnostics;
 
@@ -7,15 +9,20 @@ namespace MyShop.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext database ,ILogger<HomeController> logger)
         {
+            _db = database;
             _logger = logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
-            return View();
+            var user  = _db.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+
+            return View(user);
         }
 
         public IActionResult Privacy()
