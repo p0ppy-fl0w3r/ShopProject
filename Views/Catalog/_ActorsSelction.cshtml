@@ -1,0 +1,23 @@
+﻿@model Actor
+
+<form>
+
+    <div class="actor-row">
+        <div class="card card-body my-3">
+
+            <div class="form-group">
+                <label asp-for="ActorId" class="control-label">Actor</label>
+                <select id="actor-select" asp-for="ActorId" class="form-control" asp-items="ViewBag.ActorList">
+                    <option value="">--Select an actor--</option>
+                </select>
+                <span asp-validation-for="ActorId" class="text-danger"></span>
+            </div>
+
+
+
+            <a href="#" class="deleteRow">delete</a>
+        </div>
+
+    </div>
+</form>
+

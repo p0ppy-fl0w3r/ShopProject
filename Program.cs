@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MyShop.Data;
 using MyShop.Models;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

@@ -14,7 +14,7 @@
             @*For category*@
 
             <div class="form-group">
-                <label asp-for="Category.CategoryId" class="control-label"></label>
+                <label asp-for="Category.CategoryId" class="control-label">Category</label>
                 <select id="category-select" asp-for="Category.CategoryId" class="form-control" asp-items="ViewBag.CategoryList"></select>
                 <span asp-validation-for="Category.CategoryId" class="text-danger"></span>
             </div>
@@ -43,7 +43,7 @@
             @*For producer*@
 
             <div class="form-group">
-                <label asp-for="Producer.ProducerId" class="control-label"></label>
+                <label asp-for="Producer.ProducerId" class="control-label">Producer</label>
                 <select id="producer-select" asp-for="Producer.ProducerId" class="form-control" asp-items="ViewBag.ProduceList"></select>
                 <span asp-validation-for="Producer.ProducerId" class="text-danger"></span>
             </div>
@@ -66,7 +66,7 @@
             @*For Studio*@
 
             <div class="form-group">
-                <label asp-for="Studio.StudioId" class="control-label"></label>
+                <label asp-for="Studio.StudioId" class="control-label">Studio</label>
                 <select id="studio-select" asp-for="Studio.StudioId" class="form-control" asp-items="ViewBag.StudioList"></select>
                 <span asp-validation-for="Studio.StudioId" class="text-danger"></span>
             </div>
@@ -89,13 +89,13 @@
             @*For DvD title*@
 
             <div class="form-group">
-                <label asp-for="Title" class="control-label">Studio's Name</label>
+                <label asp-for="Title" class="control-label">DvD Title</label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="DateReleased" class="control-label"></label>
+                <label asp-for="DateReleased" class="control-label">Release Date</label>
                 <input asp-for="DateReleased" type="date" class="form-control" />
                 <span asp-validation-for="DateReleased" class="text-danger"></span>
             </div>
@@ -105,22 +105,33 @@
                 <span asp-validation-for="Rate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PenaltyRate" class="control-label"></label>
+                <label asp-for="PenaltyRate" class="control-label">Penalty Rate</label>
                 <input asp-for="PenaltyRate" class="form-control" />
                 <span asp-validation-for="PenaltyRate" class="text-danger"></span>
             </div>
 
-             <div class="form-group">
-                <input asp-for="DvDImages" type="file" class="form-control" multiple/>
+            <div class="form-group mt-2 mb-2">
+                <label asp-for="DvDImages" class="control-label">DvD Images</label>
+                <input asp-for="DvDImages" type="file" accept="image/*" class="form-control" multiple />
                 <span asp-validation-for="DvDImages" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+
+            @*For Actor*@
+
+            <div id="actor-rows">
+                <label class="control-label">Actors</label>
+
+            </div>
+            <a id="addActor" asp-action="AddActorItem">Add Actor</a>
+            <a id="add-new-actor" asp-action="Create" target="_blank"  asp-controller="Actors" asp-route-close="true">Add new actor</a>
+
+            @*Submit button.*@
+
+            <div class="form-group mt-2">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
 
-
-           
         </form>
     </div>
 
@@ -163,6 +174,20 @@
     toggleDisable(producerSwitch, producerSelect);
     toggleDisable(studioSwitch, studioSelect);
 
+
+    $("#addActor").click(function () {
+            $.ajax({
+                url: this.href,
+                cache: false,
+                success: function (html) { $("#actor-rows").append(html); }
+            });
+            return false;
+        });
+
+
+    $(document.body).on('click','a.deleteRow',function () {
+        $(this).closest("div.actor-row").remove();
+    });
 
 </script>
 }

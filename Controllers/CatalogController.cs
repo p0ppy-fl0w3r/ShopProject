@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using MyShop.Data;
 using MyShop.DTOs;
 using MyShop.Models;
 
-// TODO delete and recreate the database
-// FIXME StudioId is not a identity column. It was not auto-generating.
+// FIXME delete dvd doesn't work
 
 namespace MyShop.Controllers
 {
@@ -58,16 +59,18 @@ namespace MyShop.Controllers
         // GET: Catalog/Create
         public IActionResult Create()
         {
-            var dvdDto = new DvdTitleDto { DateReleased = DateTime.Now };
+            var dvdDto = new DvdTitleDto { DateReleased = DateTime.Now, Actors = new List<Actor>() };
 
             ViewData["CategoryList"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating");
             ViewData["ProduceList"] = new SelectList(_context.Producers, "ProducerId", "ProducerName");
             ViewData["StudioList"] = new SelectList(_context.Studios, "StudioId", "StudioName");
+            ViewData["ActorList"] = new SelectList(_context.Actors, "ActorId", "ActorName");
 
 
 
             return View(dvdDto);
         }
+
 
         private bool IsOldValid(DvdTitleDto dto)
         {
@@ -139,28 +142,20 @@ namespace MyShop.Controllers
 
                     _context.SaveChanges();
 
-                    string contentPath = Path.Combine(_webHostEnvironment.ContentRootPath, "uploads", $"{mDvdTitle.DvDname}_{mDvdTitle.DvdId}");
+                    // Save the images to the folder in server.
+                    var filePaths = await SaveImages(dvdDto.DvDImages, mDvdTitle);
 
-                    if (!Directory.Exists(contentPath))
+                    foreach (string path in filePaths)
                     {
-                        Directory.CreateDirectory(contentPath);
-                    }
-
-                    foreach (var file in dvdDto.DvDImages)
-                    {
-                        //Checking file is available to save.  
-                        if (file != null)
+                        _context.DvDimages.Add(new DvDimage
                         {
-                            var InputFileName = Path.GetFileName(file.FileName);
-                            var ServerSavePath = Path.Combine(contentPath, InputFileName);
-                            //Save file to server folder  
-                            using (Stream fileStream = new FileStream(ServerSavePath, FileMode.Create))
-                            {
-                                await file.CopyToAsync(fileStream);
-                            }
-                        }
+                            DvDimageId = 0,
+                            DvDnumber = mDvdTitle.DvdId,
+                            DvdImage1 = path
+                        });
                     }
 
+                    await _context.SaveChangesAsync();
 
                     transaction.Commit();
 
@@ -172,11 +167,51 @@ namespace MyShop.Controllers
                 }
             }
 
-            // TODO show the titles instead of id.
             ViewData["CategoryId"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating", dvdDto.Category.CategoryId);
             ViewData["ProduceId"] = new SelectList(_context.Producers, "ProducerId", "ProducerName", dvdDto.Producer.ProducerId);
             ViewData["StudioId"] = new SelectList(_context.Studios, "StudioId", "StudioName", dvdDto.Studio.StudioId);
             return View(dvdDto);
+        }
+
+        private async Task<List<string>> SaveImages(IFormFileCollection files, Dvdtitle mDvdTitle)
+        {
+
+            string uploadFolder = Path.Combine("uploads", $"{mDvdTitle.DvDname}_{mDvdTitle.DvdId}");
+            string contentPath = Path.Combine(_webHostEnvironment.ContentRootPath, uploadFolder);
+
+            if (!Directory.Exists(contentPath))
+            {
+                Directory.CreateDirectory(contentPath);
+            }
+
+            List<string> filePaths = new List<string>();
+
+            foreach (var file in files)
+            {
+                if (file != null)
+                {
+                    var InputFileName = Path.GetFileName(file.FileName);
+
+                    // File paths that will be saved to the database.
+                    filePaths.Add(Path.Combine(uploadFolder, InputFileName));
+
+                    var ServerSavePath = Path.Combine(contentPath, InputFileName);
+                    //Save file to uploads folder  
+                    using (Stream fileStream = new FileStream(ServerSavePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                }
+            }
+
+            return filePaths;
+        }
+
+        public IActionResult AddActorItem()
+        {
+            ViewData["ActorList"] = new SelectList(_context.Actors, "ActorId", "ActorName");
+
+            return PartialView("_ActorsSelction", new Actor());
         }
 
         // GET: Catalog/Edit/5

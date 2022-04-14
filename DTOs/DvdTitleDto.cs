@@ -22,8 +22,12 @@ namespace MyShop.DTOs
         public decimal? PenaltyRate { get; set; }
 
         [DataType(DataType.Upload)]
-        [Display(Name = "Upload Image")]
-        [Required(ErrorMessage = "Please choose image to upload.")]
+        [Required(ErrorMessage = "Please choose at least one image.")]
         public IFormFileCollection DvDImages { get; set; }
+
+
+        public List<Actor> Actors { get; set; }
+
+
     }
 }
