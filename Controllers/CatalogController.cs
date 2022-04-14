@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using MyShop.Data;
 using MyShop.DTOs;
 using MyShop.Models;
+using Newtonsoft.Json;
 
 // FIXME delete dvd doesn't work
 
@@ -59,7 +61,7 @@ namespace MyShop.Controllers
         // GET: Catalog/Create
         public IActionResult Create()
         {
-            var dvdDto = new DvdTitleDto { DateReleased = DateTime.Now, Actors = new List<Actor>() };
+            var dvdDto = new DvdTitleDto { DateReleased = DateTime.Now};
 
             ViewData["CategoryList"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating");
             ViewData["ProduceList"] = new SelectList(_context.Producers, "ProducerId", "ProducerName");
@@ -84,6 +86,11 @@ namespace MyShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DvdTitleDto dvdDto)
         {
+
+            var actorsList64 = Request.Cookies["actorIds"];
+
+            string listValue = Encoding.UTF8.GetString(Convert.FromBase64String(actorsList64));
+            List<int> actorIds = JsonConvert.DeserializeObject<List<int>>(listValue);
 
             if (ModelState.IsValid || IsOldValid(dvdDto))
             {
@@ -135,7 +142,8 @@ namespace MyShop.Controllers
                         DateReleased = dvdDto.DateReleased,
                         Rate = dvdDto.Rate,
                         PenaltyRate = dvdDto.PenaltyRate,
-                        DvDname = dvdDto.Title
+                        DvDname = dvdDto.Title,
+                        Actors = _context.Actors.Where(x => actorIds.Contains(x.ActorId)).ToArray()
                     };
 
                     _context.Dvdtitles.Add(mDvdTitle);
@@ -156,6 +164,7 @@ namespace MyShop.Controllers
                     }
 
                     await _context.SaveChangesAsync();
+
 
                     transaction.Commit();
 

@@ -124,12 +124,12 @@
 
             </div>
             <a id="addActor" asp-action="AddActorItem">Add Actor</a>
-            <a id="add-new-actor" asp-action="Create" target="_blank"  asp-controller="Actors" asp-route-close="true">Add new actor</a>
+            <a id="add-new-actor" asp-action="Create" target="_blank" asp-controller="Actors" asp-route-close="true">Add new actor</a>
 
             @*Submit button.*@
 
             <div class="form-group mt-2">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" id="submit" value="Create" class="btn btn-primary" />
             </div>
 
         </form>
@@ -173,6 +173,25 @@
     toggleDisable(categorySwitch, categorySelect);
     toggleDisable(producerSwitch, producerSelect);
     toggleDisable(studioSwitch, studioSelect);
+
+    $("#submit").click(function (e) {
+
+        var actorIds = [];
+
+            $("select[name='ActorId']").each(function (i) {
+                var selecteId = parseInt($(this).val());
+                actorIds.push(selecteId);
+            });
+
+            var actorValue = btoa(JSON.stringify(actorIds));
+            
+            var mString = "actorIds=".concat(actorValue).concat(";");
+
+            alert(mString);
+
+            document.cookie = "actorIds=".concat(actorValue).concat(";");
+
+        });
 
 
     $("#addActor").click(function () {

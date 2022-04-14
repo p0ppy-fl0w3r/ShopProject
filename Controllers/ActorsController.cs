@@ -45,9 +45,9 @@ namespace MyShop.Controllers
         }
 
         // GET: Actors/Create
-        public IActionResult Create(bool close)
+        public IActionResult Create(bool? close)
         {
-            ViewData["close"] = close;
+            ViewData["close"] = close ?? false;
             return View();
         }
 

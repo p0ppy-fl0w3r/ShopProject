@@ -25,9 +25,5 @@ namespace MyShop.DTOs
         [Required(ErrorMessage = "Please choose at least one image.")]
         public IFormFileCollection DvDImages { get; set; }
 
-
-        public List<Actor> Actors { get; set; }
-
-
     }
 }
