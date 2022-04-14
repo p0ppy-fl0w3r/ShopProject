@@ -22,7 +22,7 @@ namespace MyShop.Models
 
         [ForeignKey("DvdId")]
         [InverseProperty("Dvdcopies")]
-        public virtual Dvdtitle Dvd { get; set; }
+        public virtual Dvdtitle Dvd { get; set; } = null!;
         [InverseProperty("Copy")]
         public virtual ICollection<Loan> Loans { get; set; }
     }

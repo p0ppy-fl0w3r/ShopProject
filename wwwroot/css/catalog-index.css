@@ -1,0 +1,43 @@
+﻿
+
+#dvd-add {
+    width: fit-content;
+    border: 1px black solid;
+    border-radius: 15px;
+    margin: 5px;
+    box-shadow: 5px 5px 5px rgba(128, 128, 128, 0.8);
+    padding: 8px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background-color: whitesmoke;
+    user-select: none;
+    transition: transform, position, box-shadow ease-in 0.12s;
+    transition: box-shadow linear 0.07s;
+    cursor: pointer;
+}
+
+    #dvd-add:hover {
+        transform: scale(1.03);
+    }
+
+    #dvd-add:active {
+        bottom: 18px;
+        right: 18px;
+        box-shadow: 3px 3px 3px rgba(128, 128, 128, 0.9);
+    }
+
+    #dvd-add p {
+        width: fit-content;
+        margin: 0px;
+        font-size: 20px;
+        margin-block-end: 0px;
+        font-family: 'Varela Round', sans-serif;
+        font-weight: bold;
+        margin-block-start: 0px;
+    }
+
+        #dvd-add p img {
+            width: 1em;
+        }

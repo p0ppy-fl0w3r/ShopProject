@@ -16,13 +16,12 @@ namespace MyShop.Models
 
         [Key]
         public int ActorId { get; set; }
-        [Required]
         [StringLength(50)]
-        public string ActorName { get; set; }
         [Required]
+        public string ActorName { get; set; } = null!;
         [StringLength(50)]
-        
-        public string ActorLastName { get; set; }
+        [Required]
+        public string ActorLastName { get; set; } = null!;
         
         
         public string ProfileUrl { get; set; }

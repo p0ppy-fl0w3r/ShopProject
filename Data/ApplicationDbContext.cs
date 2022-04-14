@@ -124,6 +124,7 @@ namespace MyShop.Data
                     .HasName("MembershipCategory_PK");
             });
 
+
         }
     }
 }

@@ -16,10 +16,10 @@ namespace MyShop.Models
 
         [Key]
         public int LoanTypeId { get; set; }
+
         [Required]
-        
-        
         public string LoanTypeName { get; set; }
+        [Required]
         public int? DurationDays { get; set; }
 
         [InverseProperty("Type")]

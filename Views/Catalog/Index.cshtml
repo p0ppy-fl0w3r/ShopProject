@@ -4,11 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@section Styles{
+<link href="@Url.Content("~/css/catalog-index.css")" rel="stylesheet" type="text/css" />
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -34,32 +34,40 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateReleased)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PenaltyRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.AgeRating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Produce.ProducerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Studio.StudioName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DvdId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DvdId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DvdId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateReleased)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PenaltyRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.AgeRating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Produce.ProducerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Studio.StudioName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.DvdId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.DvdId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.DvdId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<a asp-action="Create">
+    <div id="dvd-add">
+
+        <p> <img src="~/images/plus.webp" alt="Add dvd icon"> Add DvD</p>
+    </div>
+</a>

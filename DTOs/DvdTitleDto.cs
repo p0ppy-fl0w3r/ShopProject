@@ -13,8 +13,17 @@ namespace MyShop.DTOs
 
         public DateTime DateReleased { get; set; }
 
+        [Required(ErrorMessage = "Please add a DvD title.")]
+        [MaxLength(100)]
+        public string Title { get; set; }   
+
         public decimal Rate { get; set; }
 
         public decimal? PenaltyRate { get; set; }
+
+        [DataType(DataType.Upload)]
+        [Display(Name = "Upload Image")]
+        [Required(ErrorMessage = "Please choose image to upload.")]
+        public IFormFileCollection DvDImages { get; set; }
     }
 }

@@ -14,12 +14,12 @@ namespace MyShop.Models
         public int DvDimageId { get; set; }
         public int DvDnumber { get; set; }
         [Column("DvdImage")]
-        
-        
+
+        [Required]
         public string DvdImage1 { get; set; }
 
         [ForeignKey("DvDnumber")]
         [InverseProperty("DvDimages")]
-        public virtual Dvdtitle DvDnumberNavigation { get; set; }
+        public virtual Dvdtitle DvDnumberNavigation { get; set; } = null!;
     }
 }

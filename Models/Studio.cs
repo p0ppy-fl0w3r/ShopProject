@@ -16,8 +16,9 @@ namespace MyShop.Models
 
         [Key]
         public int StudioId { get; set; }
-        [Required]
-        public string StudioName { get; set; }
+        
+        [Required(ErrorMessage = "Please add the studio's name.")]
+        public string StudioName { get; set; } = null!;
 
         [InverseProperty("Studio")]
         public virtual ICollection<Dvdtitle> Dvdtitles { get; set; }

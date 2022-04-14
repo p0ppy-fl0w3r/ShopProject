@@ -9,7 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
 
             @*For category*@
 
@@ -89,6 +89,12 @@
             @*For DvD title*@
 
             <div class="form-group">
+                <label asp-for="Title" class="control-label">Studio's Name</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="DateReleased" class="control-label"></label>
                 <input asp-for="DateReleased" type="date" class="form-control" />
                 <span asp-validation-for="DateReleased" class="text-danger"></span>
@@ -104,12 +110,22 @@
                 <span asp-validation-for="PenaltyRate" class="text-danger"></span>
             </div>
 
+             <div class="form-group">
+                <input asp-for="DvDImages" type="file" class="form-control" multiple/>
+                <span asp-validation-for="DvDImages" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
 
+
+           
         </form>
     </div>
+
+
+
 </div>
 
 <div>
@@ -136,10 +152,10 @@
 
     var categorySelect = document.getElementById("category-select");
     var categorySwitch = document.getElementById("new-category-toggle");
-    
+
     var producerSelect = document.getElementById("producer-select");
-    var producerSwitch = document.getElementById("new-producer-toggle"); 
-    
+    var producerSwitch = document.getElementById("new-producer-toggle");
+
     var studioSelect = document.getElementById("studio-select");
     var studioSwitch = document.getElementById("new-studio-toggle");
 

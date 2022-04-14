@@ -16,9 +16,10 @@ namespace MyShop.Models
 
         [Key]
         public int MemberCategoryId { get; set; }
-        
-        
+
+        [Required]
         public string Description { get; set; }
+        [Required]
         public int TotalLoans { get; set; }
 
         [InverseProperty("Category")]

@@ -16,10 +16,9 @@ namespace MyShop.Models
 
         [Key]
         public int ProducerId { get; set; }
-        [Required]
         [StringLength(75)]
-        
-        public string ProducerName { get; set; }
+        [Required(ErrorMessage = "Please the producer's name.")]
+        public string ProducerName { get; set; } = null!;
 
         [InverseProperty("Produce")]
         public virtual ICollection<Dvdtitle> Dvdtitles { get; set; }

@@ -17,10 +17,14 @@ namespace MyShop.Controllers
     public class CatalogController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public CatalogController(ApplicationDbContext context)
+
+        public CatalogController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
+
         }
 
         // GET: Catalog
@@ -60,10 +64,13 @@ namespace MyShop.Controllers
             ViewData["ProduceList"] = new SelectList(_context.Producers, "ProducerId", "ProducerName");
             ViewData["StudioList"] = new SelectList(_context.Studios, "StudioId", "StudioName");
 
+
+
             return View(dvdDto);
         }
 
-        private bool IsOldValid(DvdTitleDto dto) {
+        private bool IsOldValid(DvdTitleDto dto)
+        {
             return dto.Category.CategoryId != 0 || dto.Producer.ProducerId != 0 || dto.Studio.StudioId != 0;
         }
 
@@ -74,13 +81,14 @@ namespace MyShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DvdTitleDto dvdDto)
         {
-            
+
             if (ModelState.IsValid || IsOldValid(dvdDto))
             {
 
                 using var transaction = _context.Database.BeginTransaction();
 
-                try {
+                try
+                {
 
                     var category = dvdDto.Category;
                     var studio = dvdDto.Studio;
@@ -115,7 +123,8 @@ namespace MyShop.Controllers
                         producerId = producer.ProducerId;
                     }
 
-                    _context.Dvdtitles.Add(new Dvdtitle {
+                    var mDvdTitle = new Dvdtitle
+                    {
                         DvdId = 0,
                         StudioId = studioId,
                         CategoryId = categoryId,
@@ -123,14 +132,42 @@ namespace MyShop.Controllers
                         DateReleased = dvdDto.DateReleased,
                         Rate = dvdDto.Rate,
                         PenaltyRate = dvdDto.PenaltyRate,
-                    });
+                        DvDname = dvdDto.Title
+                    };
 
-                    await _context.SaveChangesAsync();
+                    _context.Dvdtitles.Add(mDvdTitle);
+
+                    _context.SaveChanges();
+
+                    string contentPath = Path.Combine(_webHostEnvironment.ContentRootPath, "uploads", $"{mDvdTitle.DvDname}_{mDvdTitle.DvdId}");
+
+                    if (!Directory.Exists(contentPath))
+                    {
+                        Directory.CreateDirectory(contentPath);
+                    }
+
+                    foreach (var file in dvdDto.DvDImages)
+                    {
+                        //Checking file is available to save.  
+                        if (file != null)
+                        {
+                            var InputFileName = Path.GetFileName(file.FileName);
+                            var ServerSavePath = Path.Combine(contentPath, InputFileName);
+                            //Save file to server folder  
+                            using (Stream fileStream = new FileStream(ServerSavePath, FileMode.Create))
+                            {
+                                await file.CopyToAsync(fileStream);
+                            }
+                        }
+                    }
+
+
                     transaction.Commit();
 
                     return RedirectToAction(nameof(Index));
                 }
-                catch {
+                catch
+                {
                     return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred on our side. Please contact the IT department.");
                 }
             }
