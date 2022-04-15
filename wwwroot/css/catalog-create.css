@@ -1,0 +1,26 @@
+﻿#dvd-form {
+    display:grid;
+    grid-template-areas: "part1 part2";
+    grid-template-columns: 600px 400px;
+}
+
+#part-1 {
+    grid-area:part1;
+    margin:0 4em 0 0;
+}
+#part-2 {
+    grid-area:part2;
+}
+
+#submit {
+    width:200px;
+    margin:2em 0 0 0;
+}
+
+.m-form-container {
+    margin:20px 0;
+}
+
+.m-form-container.first{
+    margin: 0 0 20px 0;
+}

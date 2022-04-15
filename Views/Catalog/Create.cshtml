@@ -4,132 +4,148 @@
     ViewData["Title"] = "Create";
 }
 
+@section Styles{
+<link href="@Url.Content("~/css/catalog-create.css")" rel="stylesheet" type="text/css" />
+}
+
 <h1>Add a new DvD to your collection.</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" id="dvd-form" enctype="multipart/form-data">
+            <div id="part-1">
+                @*For category*@
+                <div class="m-form-container first">
+                <div class="form-group">
+                    <label asp-for="Category.CategoryId" class="control-label">Category</label>
+                    <select id="category-select" asp-for="Category.CategoryId" class="form-control" asp-items="ViewBag.CategoryList"></select>
+                    <span asp-validation-for="Category.CategoryId" class="text-danger"></span>
+                </div>
 
-            @*For category*@
+                <div class="form-check form-switch">
+                    <input class="form-check-input" data-bs-toggle="collapse" data-bs-target="#newCategoryCollapse" aria-expanded="false" aria-controls="newCategoryCollapse" type="checkbox" id="new-category-toggle">
+                    <label class="form-check-label" for="new-category-toggle">Add a new category.</label>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Category.CategoryId" class="control-label">Category</label>
-                <select id="category-select" asp-for="Category.CategoryId" class="form-control" asp-items="ViewBag.CategoryList"></select>
-                <span asp-validation-for="Category.CategoryId" class="text-danger"></span>
-            </div>
+                <div class="collapse" id="newCategoryCollapse">
+                    <div class="card card-body">
+                        <div class="form-group">
+                            <label asp-for="Category.CategoryDescription" class="control-label">Description</label>
+                            <input asp-for="Category.CategoryDescription" class="form-control" />
+                            <span asp-validation-for="Category.CategoryDescription" class="text-danger"></span>
+                        </div>
 
-            <div class="form-check form-switch">
-                <input class="form-check-input" data-bs-toggle="collapse" data-bs-target="#newCategoryCollapse" aria-expanded="false" aria-controls="newCategoryCollapse" type="checkbox" id="new-category-toggle">
-                <label class="form-check-label" for="new-category-toggle">Add a new category.</label>
-            </div>
-
-            <div class="collapse" id="newCategoryCollapse">
-                <div class="card card-body">
-                    <div class="form-group">
-                        <label asp-for="Category.CategoryDescription" class="control-label">Description</label>
-                        <input asp-for="Category.CategoryDescription" class="form-control" />
-                        <span asp-validation-for="Category.CategoryDescription" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Category.AgeRating" class="control-label">Age Rating</label>
-                        <input asp-for="Category.AgeRating" class="form-control" />
-                        <span asp-validation-for="Category.AgeRating" class="text-danger"></span>
+                        <div class="form-group">
+                            <label asp-for="Category.AgeRating" class="control-label">Age Rating</label>
+                            <input asp-for="Category.AgeRating" class="form-control" />
+                            <span asp-validation-for="Category.AgeRating" class="text-danger"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
+                </div>
 
-            @*For producer*@
+                @*For producer*@
+                <div class="m-form-container">
 
-            <div class="form-group">
-                <label asp-for="Producer.ProducerId" class="control-label">Producer</label>
-                <select id="producer-select" asp-for="Producer.ProducerId" class="form-control" asp-items="ViewBag.ProduceList"></select>
-                <span asp-validation-for="Producer.ProducerId" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Producer.ProducerId" class="control-label">Producer</label>
+                    <select id="producer-select" asp-for="Producer.ProducerId" class="form-control" asp-items="ViewBag.ProduceList"></select>
+                    <span asp-validation-for="Producer.ProducerId" class="text-danger"></span>
+                </div>
 
-            <div class="form-check form-switch">
-                <input class="form-check-input" data-bs-toggle="collapse" data-bs-target="#newProducerCollapse" aria-expanded="false" aria-controls="newProducerCollapse" type="checkbox" id="new-producer-toggle">
-                <label class="form-check-label" for="new-producer-toggle">Add a new producer.</label>
-            </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" data-bs-toggle="collapse" data-bs-target="#newProducerCollapse" aria-expanded="false" aria-controls="newProducerCollapse" type="checkbox" id="new-producer-toggle">
+                    <label class="form-check-label" for="new-producer-toggle">Add a new producer.</label>
+                </div>
 
-            <div class="collapse" id="newProducerCollapse">
-                <div class="card card-body">
-                    <div class="form-group">
-                        <label asp-for="Producer.ProducerName" class="control-label">Producer's Name</label>
-                        <input asp-for="Producer.ProducerName" class="form-control" />
-                        <span asp-validation-for="Producer.ProducerName" class="text-danger"></span>
+                <div class="collapse" id="newProducerCollapse">
+                    <div class="card card-body">
+                        <div class="form-group">
+                            <label asp-for="Producer.ProducerName" class="control-label">Producer's Name</label>
+                            <input asp-for="Producer.ProducerName" class="form-control" />
+                            <span asp-validation-for="Producer.ProducerName" class="text-danger"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
+                </div>
 
-            @*For Studio*@
+                @*For Studio*@
+                <div class="m-form-container">
+                <div class="form-group">
+                    <label asp-for="Studio.StudioId" class="control-label">Studio</label>
+                    <select id="studio-select" asp-for="Studio.StudioId" class="form-control" asp-items="ViewBag.StudioList"></select>
+                    <span asp-validation-for="Studio.StudioId" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Studio.StudioId" class="control-label">Studio</label>
-                <select id="studio-select" asp-for="Studio.StudioId" class="form-control" asp-items="ViewBag.StudioList"></select>
-                <span asp-validation-for="Studio.StudioId" class="text-danger"></span>
-            </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" data-bs-toggle="collapse" data-bs-target="#newStudioCollapse" aria-expanded="false" aria-controls="newStudioCollapse" type="checkbox" id="new-studio-toggle">
+                    <label class="form-check-label" for="new-studio-toggle">Add a new studio.</label>
+                </div>
 
-            <div class="form-check form-switch">
-                <input class="form-check-input" data-bs-toggle="collapse" data-bs-target="#newStudioCollapse" aria-expanded="false" aria-controls="newStudioCollapse" type="checkbox" id="new-studio-toggle">
-                <label class="form-check-label" for="new-studio-toggle">Add a new studio.</label>
-            </div>
-
-            <div class="collapse" id="newStudioCollapse">
-                <div class="card card-body">
-                    <div class="form-group">
-                        <label asp-for="Studio.StudioName" class="control-label">Studio's Name</label>
-                        <input asp-for="Studio.StudioName" class="form-control" />
-                        <span asp-validation-for="Studio.StudioName" class="text-danger"></span>
+                <div class="collapse" id="newStudioCollapse">
+                    <div class="card card-body">
+                        <div class="form-group">
+                            <label asp-for="Studio.StudioName" class="control-label">Studio's Name</label>
+                            <input asp-for="Studio.StudioName" class="form-control" />
+                            <span asp-validation-for="Studio.StudioName" class="text-danger"></span>
+                        </div>
                     </div>
                 </div>
+                </div>
+
+                @*For DvD title*@
+                <div class="m-form-container">
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label">DvD Title</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="DateReleased" class="control-label">Release Date</label>
+                    <input asp-for="DateReleased" type="date" class="form-control" />
+                    <span asp-validation-for="DateReleased" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Rate" class="control-label"></label>
+                    <input asp-for="Rate" class="form-control" />
+                    <span asp-validation-for="Rate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PenaltyRate" class="control-label">Penalty Rate</label>
+                    <input asp-for="PenaltyRate" class="form-control" />
+                    <span asp-validation-for="PenaltyRate" class="text-danger"></span>
+                </div>
+            </div>
             </div>
 
-            @*For DvD title*@
-
-            <div class="form-group">
-                <label asp-for="Title" class="control-label">DvD Title</label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="DateReleased" class="control-label">Release Date</label>
-                <input asp-for="DateReleased" type="date" class="form-control" />
-                <span asp-validation-for="DateReleased" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Rate" class="control-label"></label>
-                <input asp-for="Rate" class="form-control" />
-                <span asp-validation-for="Rate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PenaltyRate" class="control-label">Penalty Rate</label>
-                <input asp-for="PenaltyRate" class="form-control" />
-                <span asp-validation-for="PenaltyRate" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mt-2 mb-2">
-                <label asp-for="DvDImages" class="control-label">DvD Images</label>
-                <input asp-for="DvDImages" type="file" accept="image/*" class="form-control" multiple />
-                <span asp-validation-for="DvDImages" class="text-danger"></span>
-            </div>
+            <div id="part-2">
+                <div class="form-group mt-2 mb-2">
+                    <label asp-for="DvDImages" class="control-label">DvD Images</label>
+                    <input asp-for="DvDImages" type="file" accept="image/*" class="form-control" multiple />
+                    <span asp-validation-for="DvDImages" class="text-danger"></span>
+                </div>
 
 
-            @*For Actor*@
+                @*For Actor*@
 
-            <div id="actor-rows">
-                <label class="control-label">Actors</label>
+                <div id="actor-rows">
+                    <label class="control-label">Actors</label>
 
-            </div>
-            <a id="addActor" asp-action="AddActorItem">Add Actor</a>
-            <a id="add-new-actor" asp-action="Create" target="_blank" asp-controller="Actors" asp-route-close="true">Add new actor</a>
+                </div>
+                <input type="button" class="btn btn-success" id="addActor" value="Add actor" />
+                <a id="add-new-actor" class="link-info" asp-action="Create" target="_blank" asp-controller="Actors" asp-route-close="true">Add new actor</a>
 
-            @*Submit button.*@
+                <input asp-for="HasActors" id="hasActor" hidden />
+                <br>
+                <span asp-validation-for="HasActors" class="text-danger"></span>
 
-            <div class="form-group mt-2">
-                <input type="submit" id="submit" value="Create" class="btn btn-primary" />
+                @*Submit button.*@
+
+                <div class="form-group d-flex justify-content-center ">
+                    <input type="submit" id="submit" value="Create" class="btn btn-primary rounded-pill" />
+                </div>
             </div>
 
         </form>
@@ -148,65 +164,5 @@
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-<script type="text/javascript">
-
-    function toggleDisable(mToggleSwitch, mField){
-        mToggleSwitch.addEventListener("change", function(event){
-            if(mToggleSwitch.checked){
-                mField.disabled = true;
-            }
-            else{
-             mField.disabled = false;
-            }
-         });
-    }
-
-    var categorySelect = document.getElementById("category-select");
-    var categorySwitch = document.getElementById("new-category-toggle");
-
-    var producerSelect = document.getElementById("producer-select");
-    var producerSwitch = document.getElementById("new-producer-toggle");
-
-    var studioSelect = document.getElementById("studio-select");
-    var studioSwitch = document.getElementById("new-studio-toggle");
-
-    toggleDisable(categorySwitch, categorySelect);
-    toggleDisable(producerSwitch, producerSelect);
-    toggleDisable(studioSwitch, studioSelect);
-
-    $("#submit").click(function (e) {
-
-        var actorIds = [];
-
-            $("select[name='ActorId']").each(function (i) {
-                var selecteId = parseInt($(this).val());
-                actorIds.push(selecteId);
-            });
-
-            var actorValue = btoa(JSON.stringify(actorIds));
-            
-            var mString = "actorIds=".concat(actorValue).concat(";");
-
-            alert(mString);
-
-            document.cookie = "actorIds=".concat(actorValue).concat(";");
-
-        });
-
-
-    $("#addActor").click(function () {
-            $.ajax({
-                url: this.href,
-                cache: false,
-                success: function (html) { $("#actor-rows").append(html); }
-            });
-            return false;
-        });
-
-
-    $(document.body).on('click','a.deleteRow',function () {
-        $(this).closest("div.actor-row").remove();
-    });
-
-</script>
+<script type="text/javascript" src=@Url.Content("~/js/catalog-create.js")></script>
 }

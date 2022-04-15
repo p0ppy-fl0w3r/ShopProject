@@ -25,5 +25,10 @@ namespace MyShop.DTOs
         [Required(ErrorMessage = "Please choose at least one image.")]
         public IFormFileCollection DvDImages { get; set; }
 
+        [Required(ErrorMessage = "Please add a actor.")]
+        [MaxLength(1)]
+        [RegularExpression("1")]
+        public string HasActors { get; set; }
+
     }
 }

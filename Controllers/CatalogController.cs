@@ -14,6 +14,7 @@ using MyShop.Models;
 using Newtonsoft.Json;
 
 // FIXME delete dvd doesn't work
+// TODO add validation for actors.
 
 namespace MyShop.Controllers
 {
