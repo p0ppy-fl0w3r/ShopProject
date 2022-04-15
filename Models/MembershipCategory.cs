@@ -15,6 +15,7 @@ namespace MyShop.Models
         }
 
         [Key]
+        [Required(ErrorMessage ="Please select a category.")]
         public int MemberCategoryId { get; set; }
 
         [Required]

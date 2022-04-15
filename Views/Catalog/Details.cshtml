@@ -48,7 +48,16 @@
         </dd>
     </dl>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.DvdId">Edit</a> |
+    <ul>
+    @foreach(var actor in Model.Actors)
+    {
+        <li>@actor.ActorName @actor.ActorLastName</li>
+    }
+    </ul>
+</div>
+
+<div>
     <a asp-action="Index">Back to List</a>
 </div>

@@ -13,11 +13,18 @@ using MyShop.DTOs;
 using MyShop.Models;
 using Newtonsoft.Json;
 
-// FIXME delete dvd doesn't work
 // TODO add validation for actors.
 
 namespace MyShop.Controllers
 {
+
+    public class FilterModel
+    {
+        public bool InStock { get; set; }
+
+        public string SearchValue { get; set; }
+    }
+
     public class CatalogController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -28,12 +35,24 @@ namespace MyShop.Controllers
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
-
         }
 
         // GET: Catalog
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchValue, bool inStock)
         {
+            // TODO filter for stock as well.
+            if (!string.IsNullOrWhiteSpace(searchValue))
+            {
+                var mData = _context.Dvdtitles
+                    .Include(d => d.Category)
+                    .Include(d => d.Produce)
+                    .Include(d=> d.Actors)
+                    .Include(d => d.Studio).Where(d => d.Actors.Where(a => a.ActorLastName == searchValue).Any());
+
+                
+                return View(await mData.ToListAsync());
+            }
+
             var applicationDbContext = _context.Dvdtitles.Include(d => d.Category).Include(d => d.Produce).Include(d => d.Studio);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -50,6 +69,7 @@ namespace MyShop.Controllers
                 .Include(d => d.Category)
                 .Include(d => d.Produce)
                 .Include(d => d.Studio)
+                .Include(d => d.Actors)
                 .FirstOrDefaultAsync(m => m.DvdId == id);
             if (dvdtitle == null)
             {
@@ -62,7 +82,7 @@ namespace MyShop.Controllers
         // GET: Catalog/Create
         public IActionResult Create()
         {
-            var dvdDto = new DvdTitleDto { DateReleased = DateTime.Now};
+            var dvdDto = new DvdTitleDto { DateReleased = DateTime.Now };
 
             ViewData["CategoryList"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating");
             ViewData["ProduceList"] = new SelectList(_context.Producers, "ProducerId", "ProducerName");
@@ -248,12 +268,15 @@ namespace MyShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DvdId,ProduceId,CategoryId,StudioId,DateReleased,Rate,PenaltyRate")] Dvdtitle dvdtitle)
+        public async Task<IActionResult> Edit(int id, [Bind("DvdId,DvDname,ProduceId,CategoryId,StudioId,DateReleased,Rate,PenaltyRate")] Dvdtitle dvdtitle)
         {
             if (id != dvdtitle.DvdId)
             {
                 return NotFound();
             }
+
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+
 
             if (ModelState.IsValid)
             {

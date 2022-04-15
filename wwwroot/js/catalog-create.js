@@ -1,13 +1,4 @@
-﻿function toggleDisable(mToggleSwitch, mField) {
-    mToggleSwitch.addEventListener("change", function (event) {
-        if (mToggleSwitch.checked) {
-            mField.disabled = true;
-        }
-        else {
-            mField.disabled = false;
-        }
-    });
-}
+﻿
 
 var categorySelect = document.getElementById("category-select");
 var categorySwitch = document.getElementById("new-category-toggle");

@@ -9,6 +9,13 @@
 <link href="@Url.Content("~/css/catalog-index.css")" rel="stylesheet" type="text/css" />
 }
 
+<form asp-controller="Catalog" asp-action="Index" method="get">
+    <div class="input-group">
+        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" name="searchValue" aria-describedby="search-addon" />
+        <button type="submit" class="btn btn-outline-primary">search</button>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>

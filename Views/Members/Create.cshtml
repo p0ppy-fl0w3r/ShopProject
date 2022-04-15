@@ -1,0 +1,89 @@
+﻿@model MyShop.DTOs.MemberDto
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Member</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MemberCategory.MemberCategoryId" class="control-label"></label>
+                <select asp-for="MemberCategory.MemberCategoryId" id="category-select" class="form-control" asp-items="ViewBag.CategoryId">
+                    <option value="">--Select a category--</option>
+                </select>
+                <span asp-validation-for="MemberCategory.MemberCategoryId" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" data-bs-toggle="collapse" data-bs-target="#newCategoryCollapse" aria-expanded="false" aria-controls="newCategoryCollapse" type="checkbox" id="new-category-toggle">
+                <label class="form-check-label" for="new-category-toggle">Add a new category.</label>
+            </div>
+
+            <div class="collapse" id="newCategoryCollapse">
+                <div class="card card-body">
+                    <div class="form-group">
+                        <label asp-for="MemberCategory.Description" class="control-label">Description</label>
+                        <input asp-for="MemberCategory.Description" class="form-control" />
+                        <span asp-validation-for="MemberCategory.Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="MemberCategory.TotalLoans" class="control-label">Total Loans</label>
+                        <input asp-for="MemberCategory.TotalLoans" class="form-control" />
+                        <span asp-validation-for="MemberCategory.TotalLoans" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label"></label>
+                <input asp-for="DateOfBirth" class="form-control" type="date" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2 mb-2">
+                <label asp-for="MemberImage" class="control-label">DvD Images</label>
+                <input asp-for="MemberImage" type="file" accept="image/*" class="form-control" multiple />
+                <span asp-validation-for="MemberImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script type="text/javascript" src=@Url.Content("~/js/member-create.js")></script>
+
+}

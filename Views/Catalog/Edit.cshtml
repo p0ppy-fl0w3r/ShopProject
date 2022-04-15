@@ -13,6 +13,13 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="DvdId" />
+
+            <div class="form-group">
+                <label asp-for="DvDname" class="control-label">DvD Title</label>
+                <input asp-for="DvDname" class="form-control" />
+                <span asp-validation-for="DvDname" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="ProduceId" class="control-label"></label>
                 <select asp-for="ProduceId" class="form-control" asp-items="ViewBag.ProduceId"></select>
@@ -55,5 +62,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }
