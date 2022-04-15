@@ -12,3 +12,28 @@ function toggleDisable(mToggleSwitch, mField) {
         }
     });
 }
+
+
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("container").style.marginLeft = "auto";
+    document.body.style.backgroundColor = "white";
+}
+
+function eraseSideLogo() {
+    if ("/" != location.pathname) {
+        document.getElementById("nav-icon").style.fontSize = "0";
+
+    }
+    else {
+        document.getElementById("nav-icon").style.fontSize = "30px";
+        
+    }
+
+}
+
+eraseSideLogo();

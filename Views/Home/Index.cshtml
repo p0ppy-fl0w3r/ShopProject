@@ -26,7 +26,16 @@
 
 @section Styles{
 <link href="@Url.Content("~/css/index.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/css/layout.css")" rel="stylesheet" type="text/css" />
 }
+            
+
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="@Url.Action("Index", "Dvdcopies")">Inventory</a>
+    
+</div>
+
 
 <div class="text-center">
     <h1 id="greeting" class="display-4">@greetingMessage @Model.FirstName!</h1>
