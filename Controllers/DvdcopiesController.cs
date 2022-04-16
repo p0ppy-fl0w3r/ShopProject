@@ -77,6 +77,15 @@ namespace MyShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> OldStock() {
+
+            var oldDvd = _context.Dvdcopies.Include(d => d.Dvd).Where(c => !c.Loans.Where(l => l.ReturnedDate == null).Any());
+
+            var oldDvdNoLoan = oldDvd.Where(o => o.DatePurchased.AddDays(365) < DateTime.Now);
+
+            return View(await oldDvdNoLoan.ToListAsync());
+        }
+
         private bool DvdcopyExists(int id)
         {
             return _context.Dvdcopies.Any(e => e.CopyId == id);

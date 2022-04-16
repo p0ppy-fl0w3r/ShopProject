@@ -1,0 +1,49 @@
+﻿@model IEnumerable<MyShop.Models.Dvdcopy>
+
+
+@{
+    ViewData["Title"] = "Old Stock";
+}
+<h1>Old stock</h1>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Purchase Date
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Copy Id
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < @Model.Count(); i++)
+        {
+            var item = Model.ToList()[i];
+            var sn = i + 1;
+            <tr>
+                <td>@sn</td>
+                <td>
+                    @item.DatePurchased.ToString("d")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dvd.DvDname)
+                </td>
+                <td>
+                    @item.CopyId
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.CopyId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
