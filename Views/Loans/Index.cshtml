@@ -6,6 +6,32 @@
 
 <h1>Index</h1>
 
+@if (!string.IsNullOrEmpty(ViewBag.summary))
+{
+
+    <button type="button" id="summary-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#summaryModal" hidden>
+        Modal
+    </button>
+
+    <div class="modal fade" id="summaryModal" tabindex="-1" aria-labelledby="summaryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="summaryModalLabel">Summary</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @Html.Raw(@ViewBag.summary)
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
 <p>
     <a asp-action="Available">Create New</a>
 </p>
@@ -34,32 +60,54 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOut)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateDue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReturnedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Copy.CopyId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Member.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type.LoanTypeName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.LoanId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.LoanId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.LoanId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOut)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateDue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReturnedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Copy.CopyId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Member.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type.LoanTypeName)
+                </td>
+                <td>
+
+                    <a asp-action="Details" asp-route-id="@item.LoanId">Details</a>
+
+                    @if (item.ReturnedDate == null)
+                    {
+
+                        <a asp-action="Edit" asp-route-id="@item.LoanId">Return</a>
+                    }
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+<script type="text/javascript">
+    // Show the error message if there w
+    var errorButton = document.getElementById("summary-button");
+    if(errorButton != null){
+        errorButton.click();
+    }
+
+</script>
+}

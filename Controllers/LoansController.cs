@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -92,13 +93,40 @@ namespace MyShop.Controllers
             _context.Loans.Add(newLoan);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            var memberName = $"{member.FirstName} {member.LastName}";
+            var memberId = $"{member.MemberId}";
+            var copyId = $"{copy.CopyId}";
+            var originalAmount = $"{dvdRating.Dvd.Rate}";
+            var dvdTitle = $"{dvdRating.Dvd.DvDname}";
+            var dueDate = dateDue.ToString("d");
+
+            var summaryStr = $"<h3>Loaned to member.</h3><table><tr><td>Member:" +
+                $"</td><td>{memberName}</td></tr><tr><td>Member Id:</td><td>{memberId}" +
+                $"</td></tr><tr><td>Copy Id:</td><td>{copyId}</td></tr><tr><td>DvD Title" +
+                $":</td><td>{dvdTitle}</td></tr><tr><td>Original Amount:</td><td>{originalAmount}" +
+                $"</td></tr><tr><td>Due Date:</td><td>{dueDate}</td></tr></table>";
+
+
+            string encodedStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(summaryStr));
+
+
+            return RedirectToAction(nameof(Index), new { summary = encodedStr });
 
         }
 
         // GET: Loans
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string summary)
         {
+            if (summary != null)
+            {
+                string inputStr = Encoding.UTF8.GetString(Convert.FromBase64String(summary));
+
+                ViewData["summary"] = inputStr;
+            }
+            else {
+                ViewData["summary"] = "";
+            }
+
             var applicationDbContext = _context.Loans.Include(l => l.Copy).Include(l => l.Member).Include(l => l.Type);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -124,64 +152,59 @@ namespace MyShop.Controllers
             return View(loan);
         }
 
-      
 
-        // GET: Loans/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+
+        // Called when the member returns the DvD
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var loan = await _context.Loans.FindAsync(id);
+            var loan =  _context.Loans
+                .Include(l => l.Member)
+                .Include(l => l.Copy)
+                .Include(l => l.Copy.Dvd)
+                .Where(l => l.LoanId==id)
+                .FirstOrDefault();
+
             if (loan == null)
             {
                 return NotFound();
             }
-            ViewData["CopyId"] = new SelectList(_context.Dvdcopies, "CopyId", "CopyId", loan.CopyId);
-            ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "Address", loan.MemberId);
-            ViewData["TypeId"] = new SelectList(_context.LoanTypes, "LoanTypeId", "LoanTypeName", loan.TypeId);
-            return View(loan);
-        }
+            
+            loan.ReturnedDate = DateTime.Now;
 
-        // POST: Loans/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LoanId,CopyId,MemberId,TypeId,DateOut,DateDue,ReturnedDate")] Loan loan)
-        {
-            if (id != loan.LoanId)
+            _context.Loans.Update(loan);
+            await _context.SaveChangesAsync();
+
+            var memberName = $"{loan.Member.FirstName} {loan.Member.LastName}";
+            var originalAmount = loan.Copy.Dvd.Rate;
+
+            decimal penaltyAmount = 0;
+            if (loan.ReturnedDate.Value > loan.DateDue.Value)
             {
-                return NotFound();
+                penaltyAmount = loan.ReturnedDate.Value.Subtract(loan.DateDue.Value).Days * loan.Copy.Dvd.PenaltyRate ?? 0;
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(loan);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LoanExists(loan.LoanId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CopyId"] = new SelectList(_context.Dvdcopies, "CopyId", "CopyId", loan.CopyId);
-            ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "Address", loan.MemberId);
-            ViewData["TypeId"] = new SelectList(_context.LoanTypes, "LoanTypeId", "LoanTypeName", loan.TypeId);
-            return View(loan);
+            var total  = originalAmount + penaltyAmount;
+            var dvdTitle = loan.Copy.Dvd.DvDname;
+
+            var returnDate = loan.ReturnedDate.Value.ToString("d");
+            var copyId = loan.CopyId;
+
+            var htmlString = $"<h3>Received with thanks!</h3><table><tr><td>Member:</td><td>{memberName}</td>" +
+                $"</tr><tr><td>CopyId:</td><td>{copyId}</td></tr><tr><td>DvDTitle:</td><td>{dvdTitle}</td>" +
+                $"</tr><tr><td>ReturnDate:</td><td>{returnDate}</td></tr><tr><td>OriginalAmount:</td><td>{originalAmount}</td>" +
+                $"</tr><tr><td>PenaltyAmount:</td><td>{penaltyAmount}</td></tr><tr><td><strong>Total:</strong></td><td>{total}</td></tr></table>";
+               
+
+
+            string encodedStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(htmlString));
+
+            return RedirectToAction(nameof(Index), new {summary = encodedStr });
+
+
         }
+
+
 
 
         private bool LoanExists(int id)
