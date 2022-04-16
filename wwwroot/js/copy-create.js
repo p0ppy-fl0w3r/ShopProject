@@ -50,7 +50,7 @@ function checkAndSubmit() {
     }
 
     if (isValid) {
-        var mData = JSON.stringify({ "CopyId": 0, "DvdId": dvdId, "DatePurchased": dateStr });
+        var mData = JSON.stringify({ "CopyId": 0, "DvdId": dvdId, "DatePurchased": dateStr, "TotalCopies": count });
 
 
         const settings = {

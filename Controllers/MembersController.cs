@@ -23,8 +23,25 @@ namespace MyShop.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchValue, string isId)
         {
+            if (!string.IsNullOrWhiteSpace(searchValue))
+            {
+
+                if (isId == "on")
+                {
+                    var filteredMember = _context.Members.Include(m => m.Category).Where(m => m.MemberId.ToString() == searchValue);
+                    
+                    return View(await filteredMember.ToListAsync());
+                }
+                else
+                {
+                    var filteredMember = _context.Members.Include(m => m.Category).Where(m => m.LastName.Contains(searchValue));
+                    return View(await filteredMember.ToListAsync());
+                }
+                
+            }
+
             var applicationDbContext = _context.Members.Include(m => m.Category);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -39,6 +56,7 @@ namespace MyShop.Controllers
 
             var member = await _context.Members
                 .Include(m => m.Category)
+                .Include(m => m.Loans.Where(l  => l.DateOut.Value.AddDays(31) >= DateTime.Now))
                 .FirstOrDefaultAsync(m => m.MemberId == id);
             if (member == null)
             {
@@ -80,13 +98,15 @@ namespace MyShop.Controllers
                 {
                     _context.MembershipCategories.Add(category);
                 }
-                else { 
+                else
+                {
                     category = _context.MembershipCategories.Where(c => c.MemberCategoryId == category.MemberCategoryId).FirstOrDefault();
                 }
 
                 var filePath = await SaveImages(member.MemberImage, $"{member.FirstName}_{member.LastName}_{DateTime.Now.Millisecond}");
 
-                var newMember = new Member {
+                var newMember = new Member
+                {
                     MemberId = 0,
                     FirstName = member.FirstName,
                     LastName = member.LastName,

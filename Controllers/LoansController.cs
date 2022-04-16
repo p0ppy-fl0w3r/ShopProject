@@ -204,9 +204,6 @@ namespace MyShop.Controllers
 
         }
 
-
-
-
         private bool LoanExists(int id)
         {
             return _context.Loans.Any(e => e.LoanId == id);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyShop.Data;
+using MyShop.DTOs;
 using MyShop.Models;
 
 namespace MyShop.Api
@@ -16,14 +17,23 @@ namespace MyShop.Api
         }
 
         [HttpPost]
-        public IActionResult AddCopy(Dvdcopy copy) {
+        public IActionResult AddCopy(CopyApiDto copy) {
             if (copy.CopyId != 0)
             {
                 return Conflict();
             }
-            _db.Dvdcopies.Add(copy);
+
+            for (int i = 0; i < copy.TotalCopies; i++) {
+                _db.Dvdcopies.Add(new Dvdcopy { 
+                    CopyId = 0,
+                    DatePurchased = copy.DatePurchased,
+                    DvdId = copy.DvdId,
+                });
+            }
+
+            
             _db.SaveChanges();
-            return Ok(copy);
+            return Ok();
         }
     }
 }
