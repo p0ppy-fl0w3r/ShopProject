@@ -9,6 +9,8 @@ using MyShop.Data;
 using MyShop.DTOs;
 using MyShop.Models;
 
+// TODO seed loan type or let the user add one.
+
 namespace MyShop.Controllers
 {
     public class LoansController : Controller
@@ -27,9 +29,12 @@ namespace MyShop.Controllers
             {
                 ViewData["message"] = error;
             }
-            else {
+            else
+            {
                 ViewData["message"] = "";
             }
+
+            ViewData["TypeId"] = new SelectList(_context.LoanTypes, "LoanTypeId", "LoanTypeName");
 
             var avalilableCopies = _context.Dvdcopies.Include(c => c.Loans).Include(c => c.Dvd).Where(c => c.Loans.Count < 1 || c.Loans.All(e => e.ReturnedDate != null));
             var dvdCopies = await avalilableCopies.ToListAsync();
@@ -52,6 +57,18 @@ namespace MyShop.Controllers
 
             var member = _context.Members.Where(m => m.MemberId == copy.MemberId).FirstOrDefault();
 
+            var loanType = _context.LoanTypes.Where(t => t.LoanTypeId == copy.TypeId).FirstOrDefault();
+            int duration = 0;
+
+            if (loanType != null)
+            {
+                duration = loanType.DurationDays ?? 0;
+            }
+            else
+            {
+                return RedirectToAction("Available", "Loans", new { error = "Bigger error!" });
+            }
+
             if (member == null)
             {
                 return RedirectToAction("Available", "Loans", new { error = "Big error!" });
@@ -59,18 +76,24 @@ namespace MyShop.Controllers
 
             // TODO check the member's age and dvd's rating.
 
+            var dateOut = DateTime.Now;
+            var dateDue = dateOut.AddDays(duration);
 
+            var newLoan = new Loan
+            {
+                LoanId = 0,
+                Type = loanType,
+                CopyId = copy.CopyId,
+                MemberId = copy.MemberId,
+                DateOut = dateOut,
+                DateDue = dateDue,
+            };
 
-            Console.WriteLine($"The ids are {copy.CopyId} {copy.MemberId}");
+            _context.Loans.Add(newLoan);
+            await _context.SaveChangesAsync();
 
-            return View();
+            return RedirectToAction(nameof(Index));
 
-
-        }
-
-        private IActionResult JavaScript(object p)
-        {
-            throw new NotImplementedException();
         }
 
         // GET: Loans
@@ -101,33 +124,7 @@ namespace MyShop.Controllers
             return View(loan);
         }
 
-        // GET: Loans/Create
-        public IActionResult Create()
-        {
-            ViewData["CopyId"] = new SelectList(_context.Dvdcopies, "CopyId", "CopyId");
-            ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "Address");
-            ViewData["TypeId"] = new SelectList(_context.LoanTypes, "LoanTypeId", "LoanTypeName");
-            return View();
-        }
-
-        // POST: Loans/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LoanId,CopyId,MemberId,TypeId,DateOut,DateDue,ReturnedDate")] Loan loan)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(loan);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CopyId"] = new SelectList(_context.Dvdcopies, "CopyId", "CopyId", loan.CopyId);
-            ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "Address", loan.MemberId);
-            ViewData["TypeId"] = new SelectList(_context.LoanTypes, "LoanTypeId", "LoanTypeName", loan.TypeId);
-            return View(loan);
-        }
+      
 
         // GET: Loans/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -186,37 +183,6 @@ namespace MyShop.Controllers
             return View(loan);
         }
 
-        // GET: Loans/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var loan = await _context.Loans
-                .Include(l => l.Copy)
-                .Include(l => l.Member)
-                .Include(l => l.Type)
-                .FirstOrDefaultAsync(m => m.LoanId == id);
-            if (loan == null)
-            {
-                return NotFound();
-            }
-
-            return View(loan);
-        }
-
-        // POST: Loans/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var loan = await _context.Loans.FindAsync(id);
-            _context.Loans.Remove(loan);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
         private bool LoanExists(int id)
         {
