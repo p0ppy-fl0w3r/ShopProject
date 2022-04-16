@@ -8,38 +8,47 @@
 
 <form asp-controller="Members" asp-action="Index" method="get">
     <div class="input-group">
-        <input type="checkbox" name="isId">Is id?</input>
+
         <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" name="searchValue" aria-describedby="search-addon" />
-        
+
         <button type="submit" class="btn btn-outline-primary">search</button>
     </div>
+    <div class="position-relative mt-5">
+        <div class="position-absolute bottom-0 end-0">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="isId" name="isId">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Search member by id.</label>
+            </div>
+        </div>
+    </div>
 </form>
+
+
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
+
+
+<table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                @*Member Image*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                Member Id
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                DvDs in loan
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
+                Category
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MemberImage)
+                Status
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -47,23 +56,36 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Address)
+                    <div class="d-flex align-items-center">
+                        <img src="~/@item.MemberImage"
+                         alt=""
+                         style="width: 45px; height: 45px"
+                         class="rounded-circle" />
+                        <div class="ms-3">
+                            <p class="fw-bold mb-1">@item.FirstName @item.LastName</p>
+                            <p class="text-muted mb-0">@item.DateOfBirth.ToString("d")</p>
+                        </div>
+                    </div>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
+                    @item.MemberId
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
+                    @item.Loans.Where(l => l.ReturnedDate == null).Count()
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateOfBirth)
+                    @item.Category.Description
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.MemberImage)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.Description)
-                </td>
+                    @if (@item.Loans.Where(l => l.ReturnedDate == null).Count() > @item.Category.TotalLoans)
+                    {
+                        <span class="badge rounded-pill bg-danger">Limit Crossed</span>
+                    }
+                    else
+                    {
+                        <span class="badge rounded-pill bg-success">Ok</span>
+                    }
+
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.MemberId">Details</a> |
@@ -73,3 +95,4 @@
         }
     </tbody>
 </table>
+

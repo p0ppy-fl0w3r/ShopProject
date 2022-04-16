@@ -37,6 +37,7 @@ namespace MyShop.Controllers
 
             var dvdcopy = await _context.Dvdcopies
                 .Include(d => d.Dvd)
+                .Include(d => d.Loans)
                 .FirstOrDefaultAsync(m => m.CopyId == id);
             if (dvdcopy == null)
             {

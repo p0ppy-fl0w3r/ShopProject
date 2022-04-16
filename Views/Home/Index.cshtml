@@ -28,12 +28,49 @@
 <link href="@Url.Content("~/css/index.css")" rel="stylesheet" type="text/css" />
 <link href="@Url.Content("~/css/layout.css")" rel="stylesheet" type="text/css" />
 }
-            
+
 
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="@Url.Action("Index", "Dvdcopies")">Inventory</a>
-    
+
+
+    <div class="mb-1">
+        <a class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+            Inventory
+        </a>
+        <div class="collapse" id="account-collapse" style="">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <li><a href="@Url.Action("Index", "Dvdcopies")" class="link-dark rounded">DvD Copies</a></li>
+                <li><a href="javascript:void(0)" onclick="showSearchDialog()">Search Copy</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<button type="button" class="btn btn-primary" id="search-copy-btn" data-bs-toggle="modal" data-bs-target="#searchModal" data-bs-whatever="mdo" hidden>b</button>
+
+<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="searchModalLabel">Search</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Copy Id:</label>
+            <input type="number" class="form-control" id="copy-id">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="searchCopy()">Search</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -88,3 +125,12 @@
 
 </div>
 
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script type="text/javascript" src=@Url.Content("~/js/index.js")></script>
+
+}

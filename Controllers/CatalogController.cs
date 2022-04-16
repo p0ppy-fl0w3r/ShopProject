@@ -228,7 +228,7 @@ namespace MyShop.Controllers
         {
 
             string uploadFolder = Path.Combine("uploads", $"{mDvdTitle.DvDname}_{mDvdTitle.DvdId}");
-            string contentPath = Path.Combine(_webHostEnvironment.ContentRootPath, uploadFolder);
+            string contentPath = Path.Combine(_webHostEnvironment.WebRootPath, uploadFolder);
 
             if (!Directory.Exists(contentPath))
             {

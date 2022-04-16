@@ -30,19 +30,19 @@ namespace MyShop.Controllers
 
                 if (isId == "on")
                 {
-                    var filteredMember = _context.Members.Include(m => m.Category).Where(m => m.MemberId.ToString() == searchValue);
+                    var filteredMember = _context.Members.Include(m => m.Category).Include(m => m.Loans).Where(m => m.MemberId.ToString() == searchValue);
                     
                     return View(await filteredMember.ToListAsync());
                 }
                 else
                 {
-                    var filteredMember = _context.Members.Include(m => m.Category).Where(m => m.LastName.Contains(searchValue));
+                    var filteredMember = _context.Members.Include(m => m.Category).Include(m => m.Loans).Where(m => m.LastName.Contains(searchValue));
                     return View(await filteredMember.ToListAsync());
                 }
                 
             }
 
-            var applicationDbContext = _context.Members.Include(m => m.Category);
+            var applicationDbContext = _context.Members.Include(m => m.Category).Include(m => m.Loans).OrderBy(m => m.FirstName);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -131,7 +131,7 @@ namespace MyShop.Controllers
         {
 
             string uploadFolder = Path.Combine("uploads", "rupey_members", memberInfo);
-            string contentPath = Path.Combine(_webHostEnvironment.ContentRootPath, uploadFolder);
+            string contentPath = Path.Combine(_webHostEnvironment.WebRootPath, uploadFolder);
 
             if (!Directory.Exists(contentPath))
             {
