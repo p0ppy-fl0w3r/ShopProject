@@ -1,4 +1,7 @@
-﻿@model IEnumerable<MyShop.Models.Dvdtitle>
+﻿@using MyShop.Data
+@model IEnumerable<MyShop.Models.Dvdtitle>
+
+@inject ApplicationDbContext database
 
 @{
     ViewData["Title"] = "Index";
@@ -11,6 +14,9 @@
 
 <form asp-controller="Catalog" asp-action="Index" method="get">
     <div class="input-group">
+        <input type="checkbox" name="inStock" />
+        <label for="stock-check">Show only in stock.</label>
+        <br>
         <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" name="searchValue" aria-describedby="search-addon" />
         <button type="submit" class="btn btn-outline-primary">search</button>
     </div>
@@ -19,6 +25,9 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                Title
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.DateReleased)
             </th>
@@ -37,6 +46,17 @@
             <th>
                 @Html.DisplayNameFor(model => model.Studio)
             </th>
+
+            @*Only show the count when the user is searching.*@
+            @if (ViewBag.isSearch)
+            {
+                <th>
+                    Number of copies.
+                </th>
+                <th>
+                    Available copies.
+                </th>
+            }
             <th></th>
         </tr>
     </thead>
@@ -44,6 +64,9 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DvDname)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DateReleased)
                 </td>
@@ -62,6 +85,24 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Studio.StudioName)
                 </td>
+
+                @if (ViewBag.isSearch)
+                {
+                    <td>
+                        @item.Dvdcopies.Count
+                    </td>
+                    <td>
+
+                        @{
+                            var inLoan = database.Loans.Where(l => l.ReturnedDate == null).Where(l => item.DvdId == l.Copy.DvdId).Count();
+                            var copyCount = item.Dvdcopies.Count();
+                            var result = copyCount - inLoan;
+                        }
+                        @result
+
+                    </td>
+                }
+
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.DvdId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.DvdId">Details</a> |

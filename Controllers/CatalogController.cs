@@ -38,22 +38,43 @@ namespace MyShop.Controllers
         }
 
         // GET: Catalog
-        public async Task<IActionResult> Index(string searchValue, bool inStock)
+        public async Task<IActionResult> Index(string searchValue, string inStock)
         {
+            ViewData["isSearch"] = false;
             // TODO filter for stock as well.
             if (!string.IsNullOrWhiteSpace(searchValue))
             {
+                ViewData["isSearch"] = true;
+
+                if (inStock != null)
+                {
+                    var inStockData = _context.Dvdtitles
+                    .Include(d => d.Category)
+                    .Include(d => d.Produce)
+                    .Include(d => d.Actors)
+                    .Include(d => d.Dvdcopies)
+                    .Include(d => d.Studio).Where(d => d.Actors.Where(a => a.ActorLastName == searchValue).Any()).ToList();
+
+
+                    var inLoan = _context.Loans.Where(l => l.ReturnedDate == null).Where(l => inStockData.Contains(l.Copy.Dvd));
+
+                    var lStock = inLoan.Select(i => i.Copy.Dvd).Distinct().ToList<Dvdtitle>();
+
+                    return View(lStock);
+                }
+
                 var mData = _context.Dvdtitles
                     .Include(d => d.Category)
                     .Include(d => d.Produce)
-                    .Include(d=> d.Actors)
+                    .Include(d => d.Actors)
+                    .Include(d => d.Dvdcopies)
                     .Include(d => d.Studio).Where(d => d.Actors.Where(a => a.ActorLastName == searchValue).Any());
 
-                
+
                 return View(await mData.ToListAsync());
             }
 
-            var applicationDbContext = _context.Dvdtitles.Include(d => d.Category).Include(d => d.Produce).Include(d => d.Studio);
+            var applicationDbContext = _context.Dvdtitles.Include(d => d.Category).Include(d => d.Produce).Include(d => d.Studio).Include(d => d.Dvdcopies);
             return View(await applicationDbContext.ToListAsync());
         }
 
