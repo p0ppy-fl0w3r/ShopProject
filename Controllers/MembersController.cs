@@ -130,7 +130,7 @@ namespace MyShop.Controllers
         private async Task<string> SaveImages(IFormFile file, string memberInfo)
         {
 
-            string uploadFolder = Path.Combine("uploads", "rupey_members", memberInfo);
+            string uploadFolder = Path.Combine("members", "rupey_members", memberInfo);
             string contentPath = Path.Combine(_webHostEnvironment.WebRootPath, uploadFolder);
 
             if (!Directory.Exists(contentPath))

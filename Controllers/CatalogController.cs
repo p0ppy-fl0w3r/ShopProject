@@ -357,6 +357,23 @@ namespace MyShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> CompleteDetails(int? pageNumber)
+        {
+            // TODO sort the titles by date release.
+            var allDvdList = _context.Dvdtitles
+                .Include(d => d.Category)
+                .Include(d => d.Produce)
+                .Include(d => d.Studio)
+                .Include(d => d.Dvdcopies)
+                .Include(d => d.Actors)
+                .Include(d => d.DvDimages).OrderBy(d => d.DateReleased);
+
+            int pageSize = 1;
+
+            return View(await PaginatedList<Dvdtitle>.CreateAsync(allDvdList.AsNoTracking(), pageNumber ?? 1, pageSize));
+
+        }
+
         private bool DvdtitleExists(int id)
         {
             return _context.Dvdtitles.Any(e => e.DvdId == id);

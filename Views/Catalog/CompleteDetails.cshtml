@@ -1,0 +1,126 @@
+﻿@model PaginatedList<Dvdtitle>
+
+@{
+    ViewData["Title"] = "Detailed info";
+}
+
+
+
+
+@foreach (var mItems in Model)
+{
+    <section class="py-2 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="display-1">
+                    @Html.DisplayFor(item => mItems.DvDname)
+                </h1>
+                @{var releaseDate = mItems.DateReleased.ToString("d");}
+                <p class="lead mt-4">
+                    Date Released: @releaseDate
+                </p>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <div id="dvd-image-carousel" class="carousel slide border-end" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+
+                            
+                                @{var isFirst = true;}
+                            
+                            @foreach (var image in @mItems.DvDimages)
+                            {
+                                if (isFirst)
+                                {
+                                    <div class="carousel-item active" style="height:300px;" data-bs-interval="3000">
+                                        <img class="img-fluid mw-100 mh-100" src="~/@image.DvdImage1" class="d-block w-100" alt="@image.DvdImage1" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="carousel-item" style="height:300px;" data-bs-interval="2000">
+                                        <img class="img-fluid mw-100 mh-100" src="~/@image.DvdImage1" class="d-block w-100" alt="@image.DvdImage1">
+                                    </div>
+                                }
+                                isFirst = false;
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8 d-flex align-items-center">
+                    <div class="card-body ">
+                        <h5 class="display-5">From visionary producer @Html.DisplayFor(item => mItems.Produce.ProducerName)</h5>
+                        <p class="card-text">
+                            Brought to you by the our very own folks at -<strong> @Html.DisplayFor(item => mItems.Studio.StudioName) </strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="accordion mt-2" id="accordionPanelsStayOpenExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                        Cast Members
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                    <div class="accordion-body">
+                        <div class="d-flex flex-wrap justify-content-center">
+                            @{
+                                var classes = new List<string>
+                                {
+                                    "badge rounded-pill bg-primary",
+                                    "badge rounded-pill bg-success",
+                                    "badge rounded-pill bg-danger",
+                                    "badge rounded-pill bg-info text-dark",
+                                    "badge rounded-pill bg-dark"
+                                };
+
+                                Random random = new Random();
+                        }
+                            @foreach (var actor in @mItems.Actors.OrderBy(a => a.ActorLastName))
+                            {
+                                
+                                    int index = random.Next(classes.Count());
+                                    var mClass = classes[index]; 
+                                
+                                <p class="h4 mx-3 p-1"><span class="@mClass"> <i class="bi bi-dot"></i> @actor.ActorName @actor.ActorLastName</span></p>
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </section>
+}
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<div class="d-flex justify-content-center">
+    <a asp-action="CompleteDetails"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="CompleteDetails"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+</div>
+

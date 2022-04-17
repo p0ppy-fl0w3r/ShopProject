@@ -45,6 +45,7 @@
                 <li><a href="@Url.Action("OldStock", "Dvdcopies")" class="link-dark rounded">Old Stock</a></li>
             </ul>
         </div>
+        <a href="@Url.Action("CompleteDetails", "Catalog")" class="link-dark rounded">DvD Catalog</a>
     </div>
 
 </div>
@@ -52,26 +53,26 @@
 <button type="button" class="btn btn-primary" id="search-copy-btn" data-bs-toggle="modal" data-bs-target="#searchModal" data-bs-whatever="mdo" hidden>b</button>
 
 <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="searchModalLabel">Search</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Copy Id:</label>
-            <input type="number" class="form-control" id="copy-id">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="searchCopy()">Search</button>
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Copy Id:</label>
+                        <input type="number" class="form-control" id="copy-id">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="searchCopy()">Search</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 
