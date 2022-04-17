@@ -1,5 +1,12 @@
 ﻿@using MyShop.DTOs
+@using MyShop.Data
 @model IEnumerable<CopyDto>;
+
+@inject ApplicationDbContext database;
+
+@{
+    ViewData["title"] = "Loan to member";
+}
 
 @if (!string.IsNullOrEmpty(ViewBag.message))
 {
@@ -25,40 +32,88 @@
     </div>
 }
 
-@foreach (var copy in Model)
-{
+<div class="row row-cols-1 row-cols-md-3 g-4 d-flex">
 
-    <div class="card">
-        <div class="card-body">
-            <p>@copy.Dvdcopy.Dvd.DvDname</p>
-            <p>@copy.Dvdcopy.Dvd.Rate</p>
+    @foreach (var copy in Model)
+    {
 
-            <form asp-action="LoanToMember">
 
-                <input asp-for="@copy.CopyId" value="@copy.Dvdcopy.CopyId" hidden />
+        <div class="col">
+            <div class="card">
 
-                <div class="form-group">
-                    <label asp-for="@copy.MemberId" class="control-label"></label>
-                    <input asp-for="@copy.MemberId" class="form-control" />
-                    <span asp-validation-for="@copy.MemberId" class="text-danger"></span>
+                <div id="dvd-image-carousel" class="carousel slide border-bottom " data-interval="false">
+                    <div class="carousel-inner">
+
+
+                        @{
+                            var mImages = @database.DvDimages.Where(d => d.DvDnumber == copy.Dvdcopy.DvdId);
+                            var isFirst = true;
+                        }
+
+                        @foreach (var image in @mImages)
+                        {
+                            if (isFirst)
+                            {
+                                <div class="carousel-item active " style="height:250px;" >
+                                    <img class="rounded mx-auto d-block mh-100 mw-100" src="~/@image.DvdImage1" class="d-block w-100" alt="@image.DvdImage1" />
+                                </div>
+                            }
+                            else
+                            {
+                                 <div class="carousel-item" style="height:250px;" >
+                                    <img class="rounded mx-auto d-block mh-100 mw-100" src="~/@image.DvdImage1" class="d-block w-100" alt="@image.DvdImage1" />
+                                </div>
+                            }
+
+                            isFirst = false;
+
+                        }
+
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#dvd-image-carousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#dvd-image-carousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+
                 </div>
 
-                <div class="form-group">
-                    <label asp-for="@copy.TypeId" class="control-label"></label>
-                    <select asp-for="@copy.TypeId" class="form-control" asp-items="ViewBag.TypeId"></select>
-                    <span asp-validation-for="@copy.TypeId" class="text-danger"></span>
-                </div>
+                <div class="card-body">
+                    <h5 class="card-title">@copy.Dvdcopy.Dvd.DvDname</h5>
+                    <p class="text-muted">Rs. @copy.Dvdcopy.Dvd.Rate</p>
 
-                <div class="form-group">
-                    <input type="submit" value="Loan" class="btn btn-primary" />
+                    <form asp-action="LoanToMember">
+
+                        <input asp-for="@copy.CopyId" value="@copy.Dvdcopy.CopyId" hidden />
+
+                        <div class="form-group">
+                            <label asp-for="@copy.MemberId" class="control-label">Member Id</label>
+                            <input asp-for="@copy.MemberId" placeholder="Member id..." value="" class="form-control" />
+                            <span asp-validation-for="@copy.MemberId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="@copy.TypeId" class="control-label">Loan Type</label>
+                            <select asp-for="@copy.TypeId" class="form-control" asp-items="ViewBag.TypeId">
+                                <option value="">--Select a catagory--</option>
+                            </select>
+                            <span asp-validation-for="@copy.TypeId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group d-flex justify-content-center mt-2">
+                            <input class="btn btn-primary rounded-pill" type="submit" style="width: 8em;" value="Loan" class="btn btn-primary" />
+                        </div>
+                    </form>
+
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
 
-
-}
-
+    }
+</div>
 
 @section Scripts {
     @{

@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<MyShop.Models.Loan>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Loan";
 }
 
 <h1>Index</h1>
@@ -32,29 +32,28 @@
 
 }
 
-<p>
-    <a asp-action="Available">Create New</a>
-</p>
+<a type="button" asp-action="Available" class="btn btn-primary rounded-pill my-3" >
+   <i class="bi bi-plus-circle"></i> Loan to member
+</a>
+
 <table class="table">
     <thead>
         <tr>
+            <th>Title</th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOut)
+                Date Loaned
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateDue)
+                Date Due
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReturnedDate)
+                Date Returned
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Copy)
+                Copy Id
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Member)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
+                Member Name
             </th>
             <th></th>
         </tr>
@@ -64,22 +63,30 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateOut)
+                    @item.Copy.Dvd.DvDname
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateDue)
+                    @item.DateOut.Value.ToString("d")
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ReturnedDate)
+                    @item.DateDue.Value.ToString("d")
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Copy.CopyId)
+                    @if (item.ReturnedDate != null)
+                    {
+                        @item.ReturnedDate.Value.ToString("d")
+                    }
+                    else
+                    {
+                        <span class="badge rounded-pill bg-danger">Not Returned</span>
+                    }
+
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Member.Address)
+                    @item.CopyId
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Type.LoanTypeName)
+                    @item.Member.FirstName @item.Member.LastName
                 </td>
                 <td>
 

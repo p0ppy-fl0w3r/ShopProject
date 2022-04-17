@@ -37,15 +37,17 @@ namespace MyShop.Controllers
 
             ViewData["TypeId"] = new SelectList(_context.LoanTypes, "LoanTypeId", "LoanTypeName");
 
-            var avalilableCopies = _context.Dvdcopies.Include(c => c.Loans).Include(c => c.Dvd).Where(c => c.Loans.Count < 1 || c.Loans.All(e => e.ReturnedDate != null));
-            var dvdCopies = await avalilableCopies.ToListAsync();
+            var avalilableCopies = _context.Dvdcopies.Include(c => c.Loans).Include(c => c.Dvd)
+                .Where(c => c.Loans.Count < 1 || c.Loans.All(e => e.ReturnedDate != null));
+
+            var dvdCopies = avalilableCopies.OrderBy(d => d.Dvd.DvDname).ToList().GroupBy(d => d.DvdId).Select(g => g.FirstOrDefault());
 
             var copiesWithMember = dvdCopies.Select(d => new CopyDto
             {
                 Dvdcopy = d,
             });
 
-            return View(copiesWithMember.ToList<CopyDto>()); ;
+            return View(copiesWithMember); ;
         }
 
 
@@ -67,12 +69,12 @@ namespace MyShop.Controllers
             }
             else
             {
-                return RedirectToAction("Available", "Loans", new { error = "Bigger error!" });
+                return RedirectToAction("Available", "Loans", new { error = "Loan type not valid!" });
             }
 
             if (member == null)
             {
-                return RedirectToAction("Available", "Loans", new { error = "Big error!" });
+                return RedirectToAction("Available", "Loans", new { error = "Member with given id not found!" });
             }
 
             // TODO check the member's age and dvd's rating.
@@ -123,11 +125,12 @@ namespace MyShop.Controllers
 
                 ViewData["summary"] = inputStr;
             }
-            else {
+            else
+            {
                 ViewData["summary"] = "";
             }
 
-            var applicationDbContext = _context.Loans.Include(l => l.Copy).Include(l => l.Member).Include(l => l.Type);
+            var applicationDbContext = _context.Loans.Include(l => l.Copy).Include(l => l.Copy.Dvd).Include(l => l.Member).Include(l => l.Type);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -158,18 +161,18 @@ namespace MyShop.Controllers
         public async Task<IActionResult> Edit(int id)
         {
 
-            var loan =  _context.Loans
+            var loan = _context.Loans
                 .Include(l => l.Member)
                 .Include(l => l.Copy)
                 .Include(l => l.Copy.Dvd)
-                .Where(l => l.LoanId==id)
+                .Where(l => l.LoanId == id)
                 .FirstOrDefault();
 
             if (loan == null)
             {
                 return NotFound();
             }
-            
+
             loan.ReturnedDate = DateTime.Now;
 
             _context.Loans.Update(loan);
@@ -184,22 +187,22 @@ namespace MyShop.Controllers
                 penaltyAmount = loan.ReturnedDate.Value.Subtract(loan.DateDue.Value).Days * loan.Copy.Dvd.PenaltyRate ?? 0;
             }
 
-            var total  = originalAmount + penaltyAmount;
+            var total = originalAmount + penaltyAmount;
             var dvdTitle = loan.Copy.Dvd.DvDname;
 
             var returnDate = loan.ReturnedDate.Value.ToString("d");
             var copyId = loan.CopyId;
 
             var htmlString = $"<h3>Received with thanks!</h3><table><tr><td>Member:</td><td>{memberName}</td>" +
-                $"</tr><tr><td>CopyId:</td><td>{copyId}</td></tr><tr><td>DvDTitle:</td><td>{dvdTitle}</td>" +
-                $"</tr><tr><td>ReturnDate:</td><td>{returnDate}</td></tr><tr><td>OriginalAmount:</td><td>{originalAmount}</td>" +
-                $"</tr><tr><td>PenaltyAmount:</td><td>{penaltyAmount}</td></tr><tr><td><strong>Total:</strong></td><td>{total}</td></tr></table>";
-               
+                $"</tr><tr><td>Copy Id:</td><td>{copyId}</td></tr><tr><td>DvD Title:</td><td>{dvdTitle}</td>" +
+                $"</tr><tr><td>Return Date:</td><td>{returnDate}</td></tr><tr><td>Original Amount:</td><td>{originalAmount}</td>" +
+                $"</tr><tr><td>Penalty Amount:</td><td>{penaltyAmount}</td></tr><tr><td><strong>Total:</strong></td><td>{total}</td></tr></table>";
+
 
 
             string encodedStr = Convert.ToBase64String(Encoding.UTF8.GetBytes(htmlString));
 
-            return RedirectToAction(nameof(Index), new {summary = encodedStr });
+            return RedirectToAction(nameof(Index), new { summary = encodedStr });
 
 
         }
