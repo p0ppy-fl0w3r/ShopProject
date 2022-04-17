@@ -374,6 +374,23 @@ namespace MyShop.Controllers
 
         }
 
+        public async Task<IActionResult> LeastPopular()
+        {
+
+            // Selecting DvD copies with no loans or where last loan was more than 31 days.
+            var leastPopularDvs = _context.Dvdcopies
+                .Include(c => c.Loans)
+                .Include(c => c.Dvd)
+                .Where(
+                c => c.Loans.OrderBy(l => l.DateOut)
+                .LastOrDefault().DateOut.Value.AddDays(31) < DateTime.Now || c.Loans.Count < 1);
+
+            var unPopularDvd = _context.Dvdtitles.Include(c => c.Dvdcopies).Where(d => d.Dvdcopies.Count == leastPopularDvs.Where(c => c.DvdId == d.DvdId).Count());
+
+
+            return View(await unPopularDvd.ToListAsync());
+        }
+
         private bool DvdtitleExists(int id)
         {
             return _context.Dvdtitles.Any(e => e.DvdId == id);
