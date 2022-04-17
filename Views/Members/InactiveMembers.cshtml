@@ -1,0 +1,65 @@
+﻿@using MyShop.Data
+@model List<Member>
+
+@inject ApplicationDbContext databse
+
+@{
+    ViewData["Title"] = "Inactive Members";
+}
+
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Member Name</th>
+            <th>Last loan(date)</th>
+            <th>DvD title</th>
+            <th>Member Address</th>
+            <th>Last loan(days)</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <tr>
+                <td>
+                    @{
+                        var sn = i + 1;
+                    }
+                    @sn
+                </td>
+
+                <td>
+                    @{
+                        var memberItem = Model[i];
+                    }
+                    @memberItem.FirstName @memberItem.LastName
+                </td>
+
+                <td>
+                    @memberItem.Loans.OrderBy(l => l.DateOut).LastOrDefault().DateOut.Value.ToString("d")
+                </td>
+
+                <td>
+                    @{
+                        var lastLoan = @memberItem.Loans.OrderBy(l => l.DateOut).LastOrDefault();
+                        var dvdCopy = databse.Dvdcopies.Where(c => c.Loans.Contains(lastLoan)).FirstOrDefault();
+                        var title = databse.Dvdtitles.Where(t => t.DvdId == dvdCopy.DvdId).FirstOrDefault().DvDname;
+                    }
+
+                    @title
+                </td>
+
+                <td>
+                    @memberItem.Address
+                </td>
+
+                <td>
+                    @DateTime.Now.Subtract(@lastLoan.DateOut.Value).Days
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

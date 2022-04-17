@@ -31,7 +31,7 @@ namespace MyShop.Controllers
                 if (isId == "on")
                 {
                     var filteredMember = _context.Members.Include(m => m.Category).Include(m => m.Loans).Where(m => m.MemberId.ToString() == searchValue);
-                    
+
                     return View(await filteredMember.ToListAsync());
                 }
                 else
@@ -39,7 +39,7 @@ namespace MyShop.Controllers
                     var filteredMember = _context.Members.Include(m => m.Category).Include(m => m.Loans).Where(m => m.LastName.Contains(searchValue));
                     return View(await filteredMember.ToListAsync());
                 }
-                
+
             }
 
             var applicationDbContext = _context.Members.Include(m => m.Category).Include(m => m.Loans).OrderBy(m => m.FirstName);
@@ -56,7 +56,7 @@ namespace MyShop.Controllers
 
             var member = await _context.Members
                 .Include(m => m.Category)
-                .Include(m => m.Loans.Where(l  => l.DateOut.Value.AddDays(31) >= DateTime.Now))
+                .Include(m => m.Loans.Where(l => l.DateOut.Value.AddDays(31) >= DateTime.Now))
                 .FirstOrDefaultAsync(m => m.MemberId == id);
             if (member == null)
             {
@@ -239,6 +239,19 @@ namespace MyShop.Controllers
             _context.Members.Remove(member);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult InactiveMembers()
+        {
+            var inactiveMemberList = _context.Members
+                .Include(m => m.Loans)
+                .Where(
+                    m => m.Loans.Count != 0 && m.Loans.OrderBy(l => l.DateOut).
+                                                        LastOrDefault().DateOut.Value.AddDays(31) < DateTime.Now
+                )
+                .OrderBy(m => m.Loans.OrderBy(l => l.DateOut).LastOrDefault().DateOut);
+
+            return View(inactiveMemberList.ToList());
         }
 
         private bool MemberExists(int id)
