@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyShop.Data;
+using MyShop.DTOs;
 using MyShop.Models;
 
 namespace MyShop.Controllers
@@ -77,13 +78,34 @@ namespace MyShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> OldStock() {
+        public async Task<IActionResult> OldStock()
+        {
 
             var oldDvd = _context.Dvdcopies.Include(d => d.Dvd).Where(c => !c.Loans.Where(l => l.ReturnedDate == null).Any());
 
             var oldDvdNoLoan = oldDvd.Where(o => o.DatePurchased.AddDays(365) < DateTime.Now);
 
             return View(await oldDvdNoLoan.ToListAsync());
+        }
+
+        public IActionResult InLoan()
+        {
+            var currentLoan = _context.Loans
+                .Include(l => l.Copy)
+                .Include(l => l.Member)
+                .Include(l => l.Copy.Dvd)
+                .Where(l => l.ReturnedDate == null)
+                .OrderBy(l => l.DateOut)
+                .GroupBy(l => l.DateOut);
+
+            var gropuedLoanObj = currentLoan.Select(l => new InLoanDto
+            {
+                OutDate = (l.Key ?? DateTime.Now).ToString("d"),
+                Lonas = l.ToList()
+
+            });
+
+            return View(gropuedLoanObj.ToList());
         }
 
         private bool DvdcopyExists(int id)
