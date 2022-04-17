@@ -53,6 +53,7 @@ namespace MyShop.Controllers
                     .Include(d => d.Produce)
                     .Include(d => d.Actors)
                     .Include(d => d.Dvdcopies)
+                    .Include(d => d.DvDimages)
                     .Include(d => d.Studio).Where(d => d.Actors.Where(a => a.ActorLastName == searchValue).Any()).ToList();
 
 
@@ -68,13 +69,14 @@ namespace MyShop.Controllers
                     .Include(d => d.Produce)
                     .Include(d => d.Actors)
                     .Include(d => d.Dvdcopies)
+                    .Include(d => d.DvDimages)
                     .Include(d => d.Studio).Where(d => d.Actors.Where(a => a.ActorLastName == searchValue).Any());
 
 
                 return View(await mData.ToListAsync());
             }
 
-            var applicationDbContext = _context.Dvdtitles.Include(d => d.Category).Include(d => d.Produce).Include(d => d.Studio).Include(d => d.Dvdcopies);
+            var applicationDbContext = _context.Dvdtitles.Include(d => d.Category).Include(d => d.Produce).Include(d => d.Studio).Include(d => d.Dvdcopies).Include(d => d.DvDimages);
             return View(await applicationDbContext.ToListAsync());
         }
 

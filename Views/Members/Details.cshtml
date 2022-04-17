@@ -1,63 +1,128 @@
-﻿@model MyShop.Models.Member
+﻿@using MyShop.Data
+@model MyShop.Models.Member
+
+@inject ApplicationDbContext databse
 
 @{
     ViewData["Title"] = "Details";
 }
+@section Styles{
+<link href="@Url.Content("~/css/member-details.css")" rel="stylesheet" type="text/css" />
+}
 
-<h1>Details</h1>
 
-<div>
-    <h4>Member</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MemberImage)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MemberImage)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Category.Description)
-        </dd>
-    </dl>
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-6 mb-4 mb-lg-0">
+            <div class="card mb-3" style="border-radius: .5rem;">
+                <div class="row g-0">
+                    <div class="col-md-4 gradient-custom text-center text-white" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                        <img src="~/@Model.MemberImage"
+                             alt="Avatar"
+                             class="img-fluid my-5 rounded-circle"
+                             style="width: 80px;" />
+
+                        <h5>@Model.FirstName @Model.LastName</h5>
+                        <p>Member</p>
+                        <i class="far fa-edit mb-5"></i>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body p-4">
+                            <h6>Information</h6>
+                            <hr class="mt-0 mb-4">
+                            <div class="row pt-1">
+                                <div class="col-6 mb-3">
+                                    <h6>Full Name</h6>
+                                    <p class="text-muted">@Model.FirstName @Model.LastName</p>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <h6>Address</h6>
+                                    <p class="text-muted">@Model.Address</p>
+                                </div>
+                            </div>
+                            <h6>Stats</h6>
+                            <hr class="mt-0 mb-4">
+                            <div class="row pt-1">
+                                <div class="col-6 mb-3">
+                                    <h6>Category</h6>
+                                    <p class="text-muted">@Model.Category.Description</p>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <h6>Total Loans</h6>
+                                    <p class="text-muted">@Model.Loans.Count()</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<ul>
-    @foreach (var loan in @Model.Loans)
-    {
-        <li>@loan.LoanId</li>
-        <li>@loan.DateOut</li>
-        <li>@loan.ReturnedDate</li>
-        <li>-----------------------</li>
-    }
-</ul>
+
+
+
+<h4 class="text-center">Recent Loans</h4>
+<hr />
+
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Copy Id
+            </th>
+            <th>
+                Date Taken
+            </th>
+            <th>
+                Loan Type
+            </th>
+            <th>Return Status</th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < @Model.Loans.Count(); i++)
+        {
+            var item = Model.Loans.ToList()[i];
+            var sn = i + 1;
+            <tr>
+                <td>
+                    @sn
+                </td>
+                <td>
+                   @databse.Dvdtitles.Where(d => d.DvdId == @databse.Dvdcopies.Where(c => c.CopyId == item.CopyId).FirstOrDefault().DvdId).FirstOrDefault().DvDname
+                </td>
+                <td>
+                    @item.CopyId
+                </td>
+                <td>
+                    @item.DateOut.Value.ToString("d")
+                </td>
+                <td>@databse.LoanTypes.Where(t => t.LoanTypeId == item.TypeId).FirstOrDefault().LoanTypeName</td>
+                <td>
+                    @if (@item.ReturnedDate == null)
+                    {
+                        <span class="badge rounded-pill bg-danger">Not Returned</span>
+                    }
+                    else
+                    {
+                        <span class="badge rounded-pill bg-secondary">Returned</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.MemberId">Edit</a> |

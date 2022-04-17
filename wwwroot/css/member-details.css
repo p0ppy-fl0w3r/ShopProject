@@ -1,0 +1,19 @@
+﻿.gradient-custom {
+    background: linear-gradient(341deg, #2d30d0, #d02dca, #2dd098);
+    background-size: 600% 600%;
+    animation: AnimationName 30s ease infinite;
+}
+
+@keyframes AnimationName {
+    0% {
+        background-position: 31% 0%
+    }
+
+    50% {
+        background-position: 70% 100%
+    }
+
+    100% {
+        background-position: 31% 0%
+    }
+}
