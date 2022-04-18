@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,13 +19,7 @@ using Newtonsoft.Json;
 namespace MyShop.Controllers
 {
 
-    public class FilterModel
-    {
-        public bool InStock { get; set; }
-
-        public string SearchValue { get; set; }
-    }
-
+    [Authorize]
     public class CatalogController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -38,6 +33,7 @@ namespace MyShop.Controllers
         }
 
         // GET: Catalog
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string searchValue, string inStock)
         {
             ViewData["isSearch"] = false;

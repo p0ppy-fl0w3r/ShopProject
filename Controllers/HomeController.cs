@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace MyShop.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -17,7 +18,6 @@ namespace MyShop.Controllers
             _logger = logger;
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             var user  = _db.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
@@ -25,6 +25,7 @@ namespace MyShop.Controllers
             return View(user);
         }
 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
