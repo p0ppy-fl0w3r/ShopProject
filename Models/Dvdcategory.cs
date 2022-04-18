@@ -17,11 +17,9 @@ namespace MyShop.Models
         [Key]
         public int CategoryId { get; set; }
         
-        
+        [Required]
         public string CategoryDescription { get; set; }
-        
-        [Required(ErrorMessage = "Please add an age rating.")]
-        public string AgeRating { get; set; } = null!;
+        public bool AgeRestricted { get; set; }
 
         [InverseProperty("Category")]
         public virtual ICollection<Dvdtitle> Dvdtitles { get; set; }

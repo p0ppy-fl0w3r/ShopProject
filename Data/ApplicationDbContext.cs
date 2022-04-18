@@ -33,7 +33,6 @@ namespace MyShop.Data
                 entity.HasOne(d => d.DvDnumberNavigation)
                     .WithMany(p => p.DvDimages)
                     .HasForeignKey(d => d.DvDnumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Image_DVDTitle_FK");
             });
 
@@ -51,7 +50,6 @@ namespace MyShop.Data
                 entity.HasOne(d => d.Dvd)
                     .WithMany(p => p.Dvdcopies)
                     .HasForeignKey(d => d.DvdId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Copy_DVDTitle_Fk");
             });
 
@@ -79,8 +77,8 @@ namespace MyShop.Data
                     .WithMany(p => p.Dvds)
                     .UsingEntity<Dictionary<string, object>>(
                         "CastMember",
-                        l => l.HasOne<Actor>().WithMany().HasForeignKey("ActorId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("Actor_FK"),
-                        r => r.HasOne<Dvdtitle>().WithMany().HasForeignKey("DvdId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("DVDTitle_FK"),
+                        l => l.HasOne<Actor>().WithMany().HasForeignKey("ActorId").HasConstraintName("Actor_FK"),
+                        r => r.HasOne<Dvdtitle>().WithMany().HasForeignKey("DvdId").HasConstraintName("DVDTitle_FK"),
                         j =>
                         {
                             j.HasKey("DvdId", "ActorId").HasName("CastMember_PK");
@@ -94,19 +92,16 @@ namespace MyShop.Data
                 entity.HasOne(d => d.Copy)
                     .WithMany(p => p.Loans)
                     .HasForeignKey(d => d.CopyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("DVDCopy_FK");
 
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Loans)
                     .HasForeignKey(d => d.MemberId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Member_FK");
 
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.Loans)
                     .HasForeignKey(d => d.TypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("LoanType_FK");
             });
 
@@ -123,7 +118,6 @@ namespace MyShop.Data
                 entity.HasKey(e => e.MemberCategoryId)
                     .HasName("MembershipCategory_PK");
             });
-
 
         }
     }

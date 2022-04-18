@@ -107,20 +107,12 @@ namespace MyShop.Controllers
         {
             var dvdDto = new DvdTitleDto { DateReleased = DateTime.Now };
 
-            ViewData["CategoryList"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating");
+            ViewData["CategoryList"] = new SelectList(_context.Dvdcategories, "CategoryId", "CategoryDescription");
             ViewData["ProduceList"] = new SelectList(_context.Producers, "ProducerId", "ProducerName");
             ViewData["StudioList"] = new SelectList(_context.Studios, "StudioId", "StudioName");
             ViewData["ActorList"] = new SelectList(_context.Actors, "ActorId", "ActorName");
 
-
-
             return View(dvdDto);
-        }
-
-
-        private bool IsOldValid(DvdTitleDto dto)
-        {
-            return dto.Category.CategoryId != 0 || dto.Producer.ProducerId != 0 || dto.Studio.StudioId != 0;
         }
 
         // POST: Catalog/Create
@@ -136,7 +128,29 @@ namespace MyShop.Controllers
             string listValue = Encoding.UTF8.GetString(Convert.FromBase64String(actorsList64));
             List<int> actorIds = JsonConvert.DeserializeObject<List<int>>(listValue);
 
-            if (ModelState.IsValid || IsOldValid(dvdDto))
+            if (dvdDto.Category.CategoryId != 0 ) 
+            {
+                ModelState.Remove("Category.CategoryDescription");
+            }
+
+            if (dvdDto.Producer.ProducerId != 0)
+            {
+                ModelState.Remove("Producer.ProducerName");
+            }
+
+            if (dvdDto.Studio.StudioId != 0)
+            {
+                ModelState.Remove("Studio.StudioName");
+            }
+
+            
+
+            if (actorIds.Count() > 0)
+            {
+                ModelState.Remove("HasActors");
+            }
+
+            if (ModelState.IsValid)
             {
 
                 using var transaction = _context.Database.BeginTransaction();

@@ -84,6 +84,21 @@
                 <div class="card-body">
                     <h5 class="card-title">@copy.Dvdcopy.Dvd.DvDname</h5>
                     <p class="text-muted">Rs. @copy.Dvdcopy.Dvd.Rate</p>
+                    @{
+                        var original = @database.Dvdtitles.Where(t => t.DvdId == copy.Dvdcopy.DvdId).FirstOrDefault();
+                        var isRestricted = @database.Dvdcategories.Where(c => c.CategoryId == original.CategoryId).FirstOrDefault().AgeRestricted;
+                    }
+                    @if (@isRestricted)
+                    {
+                        <span class="badge bg-danger">Age Restricted</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Not Restricted</span>
+                    }
+
+                    
+
 
                     <form asp-action="LoanToMember">
 

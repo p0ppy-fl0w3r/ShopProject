@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyShop.Models
@@ -17,11 +16,13 @@ namespace MyShop.Models
 
         [Key]
         public int ActorId { get; set; }
-        [StringLength(50)]
         [Required]
+        [StringLength(50)]
+        
         public string ActorName { get; set; }
-        [StringLength(50)]
         [Required]
+        [StringLength(50)]
+        
         public string ActorLastName { get; set; }
         
         
@@ -29,7 +30,6 @@ namespace MyShop.Models
 
         [ForeignKey("ActorId")]
         [InverseProperty("Actors")]
-        [JsonIgnore]
         public virtual ICollection<Dvdtitle> Dvds { get; set; }
     }
 }

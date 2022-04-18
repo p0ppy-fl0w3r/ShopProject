@@ -23,7 +23,7 @@ namespace MyShop.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Available(string? error)
+        public IActionResult Available(string? error)
         {
 
             if (error != null)
@@ -75,6 +75,11 @@ namespace MyShop.Controllers
             if (member == null)
             {
                 return RedirectToAction("Available", "Loans", new { error = "Member with given id not found!" });
+            }
+
+            if (!member.IsEighteen())
+            {
+                return RedirectToAction("Available", "Loans", new { error = "Member is too young for this movie!" });
             }
 
             // TODO check the member's age and dvd's rating.

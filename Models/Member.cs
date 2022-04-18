@@ -17,25 +17,32 @@ namespace MyShop.Models
         [Key]
         public int MemberId { get; set; }
         public int CategoryId { get; set; }
-
         [Required]
-        public string Address { get; set; } = null!;
+        
+        
+        public string Address { get; set; }
+        [Required]
         [StringLength(50)]
+        
+        public string FirstName { get; set; }
         [Required]
-        public string FirstName { get; set; } = null!;
         [StringLength(50)]
-        [Required]
-        public string LastName { get; set; } = null!;
+        
+        public string LastName { get; set; }
         [Column(TypeName = "date")]
         public DateTime DateOfBirth { get; set; }
         
         
-        public string? MemberImage { get; set; }
+        public string MemberImage { get; set; }
 
         [ForeignKey("CategoryId")]
         [InverseProperty("Members")]
-        public virtual MembershipCategory Category { get; set; } = null!;
+        public virtual MembershipCategory Category { get; set; }
         [InverseProperty("Member")]
         public virtual ICollection<Loan> Loans { get; set; }
+
+        public bool IsEighteen() {
+            return DateOfBirth.AddYears(18) <= DateTime.Now;
+        }
     }
 }

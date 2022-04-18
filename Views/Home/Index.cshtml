@@ -49,6 +49,7 @@
         <a href="@Url.Action("CompleteDetails", "Catalog")" class="link-dark rounded">DvD Catalog</a>
         <a href="@Url.Action("InactiveMembers", "Members")" class="link-dark rounded">Inactive Members</a>
         <a href="@Url.Action("LeastPopular", "Catalog")" class="link-dark rounded">Least Popular</a>
+        <a href="javascript:void(0)" onclick="showLoanTypeDialog()"> Add Loan Type</a>
     </div>
 
 </div>
@@ -73,6 +74,38 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="searchCopy()">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary" id="add-loantype-btn" data-bs-toggle="modal" data-bs-target="#loanTypeModal" data-bs-whatever="mdo" hidden>b</button>
+
+<div class="modal fade" id="loanTypeModal" tabindex="-1" aria-labelledby="loanTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loanTypeModalLabel">Add Loan Type</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="type-name" class="col-form-label">Loan Type Name:</label>
+                        <input type="text" class="form-control" id="type-name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="num-loans" class="col-form-label">Duration:</label>
+                        <input type="number" class="form-control" id="num-loans">
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addLoanType()">Add Type</button>
+                </div>
+
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
     </div>
@@ -132,10 +165,21 @@
 
 
 @section Scripts {
+
+    <script type="text/javascript" src=@Url.Content("~/js/index.js")></script>
+
     @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
 
-<script type="text/javascript" src=@Url.Content("~/js/index.js")></script>
+
+
+<script>
+    function showLoanTypeDialog() {
+        document.getElementById("add-loantype-btn").click();
+        closeNav();
+    }
+
+</script>
 
 }

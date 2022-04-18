@@ -21,30 +21,27 @@ namespace MyShop.Models
         public int ProduceId { get; set; }
         public int CategoryId { get; set; }
         public int StudioId { get; set; }
+        [Required]
         [Column("DvDName")]
         [StringLength(100)]
-        [Required]
-        public string DvDname { get; set; } = null!;
+        
+        public string DvDname { get; set; }
         [Column(TypeName = "date")]
-
-        [Required]
         public DateTime DateReleased { get; set; }
         [Column(TypeName = "decimal(28, 0)")]
-
-        [Required]
         public decimal Rate { get; set; }
         [Column(TypeName = "decimal(28, 0)")]
         public decimal? PenaltyRate { get; set; }
 
         [ForeignKey("CategoryId")]
         [InverseProperty("Dvdtitles")]
-        public virtual Dvdcategory Category { get; set; } = null!;
+        public virtual Dvdcategory Category { get; set; }
         [ForeignKey("ProduceId")]
         [InverseProperty("Dvdtitles")]
-        public virtual Producer Produce { get; set; } = null!;
+        public virtual Producer Produce { get; set; }
         [ForeignKey("StudioId")]
         [InverseProperty("Dvdtitles")]
-        public virtual Studio Studio { get; set; } = null!;
+        public virtual Studio Studio { get; set; }
         [InverseProperty("DvDnumberNavigation")]
         public virtual ICollection<DvDimage> DvDimages { get; set; }
         [InverseProperty("Dvd")]
