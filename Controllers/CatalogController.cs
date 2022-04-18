@@ -234,7 +234,7 @@ namespace MyShop.Controllers
                 }
             }
 
-            ViewData["CategoryId"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating", dvdDto.Category.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Dvdcategories, "CategoryId", "CategoryDescription", dvdDto.Category.CategoryId);
             ViewData["ProduceId"] = new SelectList(_context.Producers, "ProducerId", "ProducerName", dvdDto.Producer.ProducerId);
             ViewData["StudioId"] = new SelectList(_context.Studios, "StudioId", "StudioName", dvdDto.Studio.StudioId);
             return View(dvdDto);
@@ -294,7 +294,7 @@ namespace MyShop.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating", dvdtitle.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Dvdcategories, "CategoryId", "CategoryDescription", dvdtitle.CategoryId);
             ViewData["ProduceId"] = new SelectList(_context.Producers, "ProducerId", "ProducerName", dvdtitle.ProduceId);
             ViewData["StudioId"] = new SelectList(_context.Studios, "StudioId", "StudioName", dvdtitle.StudioId);
             return View(dvdtitle);
@@ -335,7 +335,7 @@ namespace MyShop.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Dvdcategories, "CategoryId", "AgeRating", dvdtitle.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Dvdcategories, "CategoryId", "CategoryDescription", dvdtitle.CategoryId);
             ViewData["ProduceId"] = new SelectList(_context.Producers, "ProducerId", "ProducerName", dvdtitle.ProduceId);
             ViewData["StudioId"] = new SelectList(_context.Studios, "StudioId", "StudioName", dvdtitle.StudioId);
             return View(dvdtitle);

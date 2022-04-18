@@ -10,8 +10,6 @@ using MyShop.Data;
 using MyShop.DTOs;
 using MyShop.Models;
 
-// TODO seed loan type or let the user add one.
-
 namespace MyShop.Controllers
 {
     public class LoansController : Controller
@@ -149,6 +147,7 @@ namespace MyShop.Controllers
 
             var loan = await _context.Loans
                 .Include(l => l.Copy)
+                .Include(l => l.Copy.Dvd)
                 .Include(l => l.Member)
                 .Include(l => l.Type)
                 .FirstOrDefaultAsync(m => m.LoanId == id);

@@ -20,3 +20,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.navbar-brand {
+    font-family: 'Varela Round', sans-serif;
+    margin: 0 2px;
+}

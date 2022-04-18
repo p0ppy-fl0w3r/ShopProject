@@ -48,3 +48,7 @@
 .card-text {
     font-family: 'Varela Round', sans-serif;
 }
+
+#nav-icon {
+    margin: 0 0.8em;
+}

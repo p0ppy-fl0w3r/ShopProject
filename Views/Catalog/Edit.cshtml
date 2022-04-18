@@ -6,7 +6,7 @@
 
 <h1>Edit</h1>
 
-<h4>Dvdtitle</h4>
+<h4>Edit DvD</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -21,22 +21,22 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="ProduceId" class="control-label"></label>
+                <label asp-for="ProduceId" class="control-label">Producer</label>
                 <select asp-for="ProduceId" class="form-control" asp-items="ViewBag.ProduceId"></select>
                 <span asp-validation-for="ProduceId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
+                <label asp-for="CategoryId" class="control-label">Category</label>
                 <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StudioId" class="control-label"></label>
+                <label asp-for="StudioId" class="control-label">Studio</label>
                 <select asp-for="StudioId" class="form-control" asp-items="ViewBag.StudioId"></select>
                 <span asp-validation-for="StudioId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateReleased" class="control-label"></label>
+                <label asp-for="DateReleased" class="control-label">Date Release</label>
                 <input asp-for="DateReleased" class="form-control" />
                 <span asp-validation-for="DateReleased" class="text-danger"></span>
             </div>
@@ -46,7 +46,7 @@
                 <span asp-validation-for="Rate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PenaltyRate" class="control-label"></label>
+                <label asp-for="PenaltyRate" class="control-label">Penalty Rate</label>
                 <input asp-for="PenaltyRate" class="form-control" />
                 <span asp-validation-for="PenaltyRate" class="text-danger"></span>
             </div>

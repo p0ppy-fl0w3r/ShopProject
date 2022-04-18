@@ -28,25 +28,6 @@ namespace MyShop.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Dvdcopies/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var dvdcopy = await _context.Dvdcopies
-                .Include(d => d.Dvd)
-                .Include(d => d.Loans)
-                .FirstOrDefaultAsync(m => m.CopyId == id);
-            if (dvdcopy == null)
-            {
-                return NotFound();
-            }
-
-            return View(dvdcopy);
-        }
 
         // GET: Dvdcopies/Delete/5
         public async Task<IActionResult> Delete(int? id)

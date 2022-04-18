@@ -27,29 +27,35 @@
 @section Styles{
 <link href="@Url.Content("~/css/index.css")" rel="stylesheet" type="text/css" />
 <link href="@Url.Content("~/css/layout.css")" rel="stylesheet" type="text/css" />
+<style>
+    a{
+        font-family: 'Varela Round', sans-serif;
+    }
+</style>
 }
 
 
-<div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+<div id="mySidenav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="left:-100px;">
 
-
+    <a href="javascript:void(0)" class="closebtn text-end" onclick="closeNav()">&times;</a>
+    <img src="~/images/dvd.png" class="rounded mx-auto d-block" style="max-width:280px;" alt="...">
+    <hr/>
     <div class="mb-1">
-        <a class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-            Inventory
+        <a class="btn btn-toggle align-items-center rounded collapsed text-start" style="font-size:20px" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+         <i class="bi bi-bank mx-3"></i>Inventory
         </a>
-        <div class="collapse" id="account-collapse" style="">
+        <div class="collapse" id="account-collapse" style="font-size:16px">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="@Url.Action("Index", "Dvdcopies")" class="link-dark rounded">DvD Copies</a></li>
-                <li><a href="javascript:void(0)" onclick="showSearchDialog()">Search Copy</a></li>
-                <li><a href="@Url.Action("OldStock", "Dvdcopies")" class="link-dark rounded">Old Stock</a></li>
-                <li><a href="@Url.Action("InLoan", "Dvdcopies")" class="link-dark rounded">In Loan</a></li>
+                <li><a href="@Url.Action("Index", "Dvdcopies")" class="link-dark rounded text-end" style="font-size:18px">DvD Copies</a></li>
+                <li><a href="javascript:void(0)" onclick="showSearchDialog()" class="text-end" style="font-size:18px">Search Copy</a></li>
+                <li><a href="@Url.Action("OldStock", "Dvdcopies")" class="link-dark rounded text-end" style="font-size:18px">Old Stock</a></li>
+                <li><a href="@Url.Action("InLoan", "Dvdcopies")" class="link-dark rounded text-end" style="font-size:18px">In Loan</a></li>
             </ul>
         </div>
-        <a href="@Url.Action("CompleteDetails", "Catalog")" class="link-dark rounded">DvD Catalog</a>
-        <a href="@Url.Action("InactiveMembers", "Members")" class="link-dark rounded">Inactive Members</a>
-        <a href="@Url.Action("LeastPopular", "Catalog")" class="link-dark rounded">Least Popular</a>
-        <a href="javascript:void(0)" onclick="showLoanTypeDialog()"> Add Loan Type</a>
+        <a href="@Url.Action("CompleteDetails", "Catalog")" style="font-size:20px" class="link-dark rounded"><i class="bi bi-disc  mx-3"></i>DvD Catalog</a>
+        <a href="@Url.Action("InactiveMembers", "Members")" style="font-size:20px"  class="link-dark rounded"><i class="bi bi-person-x  mx-3"></i>Inactive Members</a>
+        <a href="@Url.Action("LeastPopular", "Catalog")" style="font-size:20px" class="link-dark rounded"><i class="bi bi-film  mx-3"></i>Least Popular</a>
+        <a href="javascript:void(0)" style="font-size:20px" onclick="showLoanTypeDialog()"><i class="bi bi-bookmark-plus  mx-3"></i>Add Loan Type</a>
     </div>
 
 </div>

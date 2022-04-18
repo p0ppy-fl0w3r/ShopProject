@@ -70,7 +70,7 @@ ScaffoldingReadMe.txt
 # StyleCop
 StyleCopReport.xml
 
-# Files built by Visual Studio
+# Files built by Visual Studiof
 *_i.c
 *_p.c
 *_h.h
@@ -99,10 +99,10 @@ StyleCopReport.xml
 *.svclog
 *.scc
 
-# Chutzpah Test files
+# Chutzpah Test filesl
 _Chutzpah*
 
-# Visual C++ cache files
+# Visual C++ cache files0
 ipch/
 *.aps
 *.ncb
@@ -113,16 +113,16 @@ ipch/
 *.VC.db
 *.VC.VC.opendb
 
-# Visual Studio profiler
+# Visual Studio profilerw
 *.psess
 *.vsp
 *.vspx
 *.sap
 
-# Visual Studio Trace Files
+# Visual Studio Trace Files3
 *.e2e
 
-# TFS 2012 Local Workspace
+# TFS 2012 Local Workspacer
 $tf/
 
 # Guidance Automation Toolkit

@@ -11,34 +11,47 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOut)
+            Date Out
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateOut)
+            @Model.DateOut.Value.ToString("d")
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateDue)
+            Date Due
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateDue)
+            @Model.DateDue.Value.ToString("d")
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReturnedDate)
+            Returned Date
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReturnedDate)
+            @if (Model.ReturnedDate == null)
+            {
+                <i>N.A</i>
+            }
+            else
+            {
+                @Model.ReturnedDate.Value.ToString("d");
+            }
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Copy)
+            DvD Title
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Copy.Dvd.DvDname
+        </dd>
+        <dt class = "col-sm-2" >
+            Copy Id
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Copy.CopyId)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Member)
+            Member
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Member.Address)
+            @Model.Member.FirstName @Model.Member.LastName
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Type)
@@ -49,6 +62,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.LoanId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

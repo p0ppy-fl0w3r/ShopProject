@@ -15,11 +15,13 @@ function toggleDisable(mToggleSwitch, mField) {
 
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("mySidenav").style.width = "300px";
+    document.getElementById("mySidenav").style.left = "0";
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("mySidenav").style.left = "-100px";
     document.getElementById("container").style.marginLeft = "auto";
     document.body.style.backgroundColor = "white";
 }
