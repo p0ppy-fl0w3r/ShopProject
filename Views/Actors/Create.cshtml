@@ -13,17 +13,17 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Actor.ActorName" class="control-label"></label>
+                <label asp-for="Actor.ActorName" class="control-label">Actor First Name</label>
                 <input asp-for="Actor.ActorName" class="form-control" />
                 <span asp-validation-for="Actor.ActorName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Actor.ActorLastName" class="control-label"></label>
+                <label asp-for="Actor.ActorLastName" class="control-label">Last Name</label>
                 <input asp-for="Actor.ActorLastName" class="form-control" />
                 <span asp-validation-for="Actor.ActorLastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Actor.ProfileUrl" class="control-label"></label>
+                <label asp-for="Actor.ProfileUrl" class="control-label">Profile URL</label>
                 <input asp-for="Actor.ProfileUrl" class="form-control" />
                 <span asp-validation-for="Actor.ProfileUrl" class="text-danger"></span>
             </div>

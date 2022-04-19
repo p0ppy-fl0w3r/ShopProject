@@ -54,9 +54,8 @@ namespace MyShop.Controllers
         public async Task<IActionResult> LoanToMember(CopyDto copy)
         {
 
-            // TODO check for age rating
 
-            var dvdRating = _context.Dvdcopies.Include(c => c.Dvd).Where(c => c.CopyId == copy.CopyId).FirstOrDefault();
+            var dvdRating = _context.Dvdcopies.Include(c => c.Dvd).Include(c => c.Dvd.Category).Where(c => c.CopyId == copy.CopyId).FirstOrDefault();
 
             var member = _context.Members.Where(m => m.MemberId == copy.MemberId).FirstOrDefault();
 
@@ -77,7 +76,7 @@ namespace MyShop.Controllers
                 return RedirectToAction("Available", "Loans", new { error = "Member with given id not found!" });
             }
 
-            if (!member.IsEighteen())
+            if (!member.IsEighteen() && dvdRating.Dvd.Category.AgeRestricted)
             {
                 return RedirectToAction("Available", "Loans", new { error = "Member is too young for this movie!" });
             }
