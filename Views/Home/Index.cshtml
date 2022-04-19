@@ -1,7 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using static MyShop.Models.UserRoles
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+
 
 @{
     ViewData["Title"] = "Home Page";
@@ -28,7 +30,7 @@
 <link href="@Url.Content("~/css/index.css")" rel="stylesheet" type="text/css" />
 <link href="@Url.Content("~/css/layout.css")" rel="stylesheet" type="text/css" />
 <style>
-    a{
+    a {
         font-family: 'Varela Round', sans-serif;
     }
 </style>
@@ -39,10 +41,10 @@
 
     <a href="javascript:void(0)" class="closebtn text-end" onclick="closeNav()">&times;</a>
     <img src="~/images/dvd.png" class="rounded mx-auto d-block" style="max-width:280px;" alt="...">
-    <hr/>
+    <hr />
     <div class="mb-1">
         <a class="btn btn-toggle align-items-center rounded collapsed text-start" style="font-size:20px" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-         <i class="bi bi-bank mx-3"></i>Inventory
+            <i class="bi bi-bank mx-3"></i>Inventory
         </a>
         <div class="collapse" id="account-collapse" style="font-size:16px">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -53,9 +55,13 @@
             </ul>
         </div>
         <a href="@Url.Action("CompleteDetails", "Catalog")" style="font-size:20px" class="link-dark rounded"><i class="bi bi-disc  mx-3"></i>DvD Catalog</a>
-        <a href="@Url.Action("InactiveMembers", "Members")" style="font-size:20px"  class="link-dark rounded"><i class="bi bi-person-x  mx-3"></i>Inactive Members</a>
+        <a href="@Url.Action("InactiveMembers", "Members")" style="font-size:20px" class="link-dark rounded"><i class="bi bi-person-x  mx-3"></i>Inactive Members</a>
         <a href="@Url.Action("LeastPopular", "Catalog")" style="font-size:20px" class="link-dark rounded"><i class="bi bi-film  mx-3"></i>Least Popular</a>
         <a href="javascript:void(0)" style="font-size:20px" onclick="showLoanTypeDialog()"><i class="bi bi-bookmark-plus  mx-3"></i>Add Loan Type</a>
+        @if (await UserManager.IsInRoleAsync(Model, UserRoles.ADMIN))
+        {
+            <a href="@Url.Action("AdminPanel", "Admin")" style="font-size:20px" class="link-dark rounded"><i class="bi bi-sliders mx-3"></i>Admin Panel</a>
+        }
     </div>
 
 </div>
@@ -170,7 +176,7 @@
 
 @section Scripts {
 
-    <script type="text/javascript" src=@Url.Content("~/js/index.js")></script>
+<script type="text/javascript" src=@Url.Content("~/js/index.js")></script>
 
     @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");

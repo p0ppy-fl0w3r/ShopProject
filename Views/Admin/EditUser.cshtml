@@ -1,0 +1,88 @@
+﻿@model OldUserModel
+
+@{
+    ViewData["title"] = "Edit User";
+}
+
+
+<div class="row justify-content-between">
+    <div class="col-md-4">
+        <form asp-action="EditUser" id="registerForm" method="post">
+            <h2>Edit user account.</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input asp-for="UserId" hidden/>
+
+            <div class="form-floating mb-3">
+                <input asp-for="FirstName" class="form-control" autocomplete="given-name" aria-required="true" placeholder=" " />
+                <label asp-for="FirstName"></label>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating  mb-3">
+                <input asp-for="LastName" class="form-control" autocomplete="family-name" placeholder=" " aria-required="true" />
+                <label asp-for="LastName"></label>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating  mb-3">
+                <p><strong>Please select the gender: </strong></p>
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(m => m.Gender, "Male", new {id = "male-radio", @class = "form-check-input"})
+                    <label class="form-check-label" for="male-radio">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(m => m.Gender, "Female", new {id = "female-radio", @class = "form-check-input"})
+                    <label class="form-check-label" for="female-radio">Female</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    @Html.RadioButtonFor(m => m.Gender, "Other", new {id = "others-radio", @class = "form-check-input"})
+                    @*<input class="form-check-input" type="radio" name="inlineRadioOptions" id="others-radio" value="Other">*@
+                    <label class="form-check-label" for="others-radio">Others</label>
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(m => m.Gender, "", new {@class="text-danger field-validation-error"})
+                </div>
+            </div>
+
+            <div class="form-floating  mb-3">
+                <input type="date" asp-for="DateOfBirth" class="form-control" autocomplete="bday" aria-required="true" />
+                <label asp-for="DateOfBirth"></label>
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating  mb-3">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" asp-for="IsNewPassword" data-bs-toggle="collapse"  data-bs-target="#newPasswordCollapse" aria-expanded="false" aria-controls="newPasswordCollapse" type="checkbox" id="new-Password-toggle">
+                    <label class="form-check-label" for="new-Password-toggle">Add a new Password.</label>
+                </div>
+
+                <div class="collapse" id="newPasswordCollapse">
+                    <div class="card card-body">
+                        <div class="form-floating  mb-3">
+                            <input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder=" " />
+                            <label asp-for="Password"></label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating  mb-3">
+                            <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder=" " />
+                            <label asp-for="ConfirmPassword"></label>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary rounded-pill">Edit user!</button>
+        </form>
+    </div>
+
+    <div class="col-md-6 col-md-offset-2">
+
+        <img src="~/images/add_user.jpg" class="img-fluid" />
+        <img src="~/images/user-add-gif.gif" class="img-fluid" />
+    </div>
+</div>

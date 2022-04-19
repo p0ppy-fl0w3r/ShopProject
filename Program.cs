@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MyShop;
 using MyShop.Data;
 using MyShop.Models;
 
@@ -52,9 +53,15 @@ using (var scope = scopeFactory.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     if (db.Database.EnsureCreated())
     {
-
+        // Create superuser.
+        AddData addData = new AddData();
+        await addData.CreateSuperAdmin(scope.ServiceProvider);
     }
+
+    
 }
+
+
 
 app.MapControllerRoute(
     name: "default",
