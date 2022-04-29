@@ -14,7 +14,6 @@ using MyShop.DTOs;
 using MyShop.Models;
 using Newtonsoft.Json;
 
-// TODO add validation for actors.
 
 namespace MyShop.Controllers
 {
@@ -37,7 +36,6 @@ namespace MyShop.Controllers
         public async Task<IActionResult> Index(string searchValue, string inStock)
         {
             ViewData["isSearch"] = false;
-            // TODO filter for stock as well.
             if (!string.IsNullOrWhiteSpace(searchValue))
             {
                 ViewData["isSearch"] = true;
@@ -371,7 +369,6 @@ namespace MyShop.Controllers
 
         public async Task<IActionResult> CompleteDetails(int? pageNumber)
         {
-            // TODO sort the titles by date release.
             var allDvdList = _context.Dvdtitles
                 .Include(d => d.Category)
                 .Include(d => d.Produce)

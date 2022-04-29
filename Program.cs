@@ -5,7 +5,6 @@ using MyShop.Data;
 using MyShop.Models;
 
 
-// FIXME some relations do not have on delete cascade.
 
 var builder = WebApplication.CreateBuilder(args);
 

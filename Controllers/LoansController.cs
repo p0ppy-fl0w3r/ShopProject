@@ -81,8 +81,6 @@ namespace MyShop.Controllers
                 return RedirectToAction("Available", "Loans", new { error = "Member is too young for this movie!" });
             }
 
-            // TODO check the member's age and dvd's rating.
-
             var dateOut = DateTime.Now;
             var dateDue = dateOut.AddDays(duration);
 
