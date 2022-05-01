@@ -17,10 +17,12 @@ function searchCopy() {
         var http = new XMLHttpRequest();
         http.open('HEAD', url, false);
         http.send();
-        if (http.status == 404)
+        if (http.status == 404) {
             alert("Copy with given id not found!");
-        else
+        }
+        else {
             window.location.href = "/Dvdcopies/Details/".concat(id.toString());
+        }
 
     }
 }

@@ -1,0 +1,66 @@
+﻿@model MyShop.Models.Loan
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Last Loan</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Date Out
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.DateOut.Value.ToString("d")
+        </dd>
+        <dt class = "col-sm-2">
+            Date Due
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.DateDue.Value.ToString("d")
+        </dd>
+        <dt class = "col-sm-2">
+            Returned Date
+        </dt>
+        <dd class = "col-sm-10">
+            @if (Model.ReturnedDate == null)
+            {
+                <i>N.A</i>
+            }
+            else
+            {
+                @Model.ReturnedDate.Value.ToString("d");
+            }
+        </dd>
+        <dt class = "col-sm-2">
+            DvD Title
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Copy.Dvd.DvDname
+        </dd>
+        <dt class = "col-sm-2" >
+            Copy Id
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Copy.CopyId)
+        </dd>
+        <dt class = "col-sm-2">
+            Member
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Member.FirstName @Model.Member.LastName
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Type.LoanTypeName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

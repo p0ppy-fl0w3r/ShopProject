@@ -51,6 +51,22 @@ namespace MyShop.Controllers
             return View(dvdcopy);
         }
 
+        public async Task<IActionResult> Details(int id) { 
+            var copyItem = await _context.Dvdcopies.Include(c => c.Dvd).Include(c => c.Loans).ThenInclude(l => l.Member).Where(c => c.CopyId == id).FirstOrDefaultAsync();
+            if (copyItem == null) {
+                return NotFound();
+            }
+
+            var lastLoan = copyItem.Loans.OrderBy(l => l.DateOut).LastOrDefault();
+
+            if (lastLoan == null)
+            {
+                return NotFound();
+            }
+
+            return View(lastLoan);
+        }
+
         // POST: Dvdcopies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
